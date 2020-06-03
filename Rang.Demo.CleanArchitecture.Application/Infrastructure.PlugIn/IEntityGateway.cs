@@ -1,0 +1,14 @@
+﻿using Rang.Demo.CleanArchitecture.Domain.Entity;
+using System.Threading.Tasks;
+
+namespace Rang.Demo.CleanArchitecture.Application.Infrastructure.PlugIn
+{
+    public interface IEntityGateway
+    {
+        //write
+        Task<Member> AddMemberAsync(Member member);
+
+        //read
+        Task<Member> GetMemberByCodenameAsync(string codename);
+    }
+}
