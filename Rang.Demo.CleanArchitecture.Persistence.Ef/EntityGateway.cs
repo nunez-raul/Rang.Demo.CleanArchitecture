@@ -1,8 +1,10 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Rang.Demo.CleanArchitecture.Application.Common;
 using Rang.Demo.CleanArchitecture.Application.Infrastructure.PlugIn;
 using Rang.Demo.CleanArchitecture.Domain.Entity;
 using Rang.Demo.CleanArchitecture.Persistence.Ef.Ef.Context;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -37,6 +39,31 @@ namespace Rang.Demo.CleanArchitecture.Persistence.Ef
             return model != null
                 ? new Member(model)
                 : null;
+        }
+
+        public async Task<Page<Member>> GetMembersByPageAsync(int pageNumber, int membersPerPage)
+        {
+            if (membersPerPage == 0)
+            {
+                throw new ArgumentException("0 is an invalid value.", nameof(membersPerPage));
+            }
+
+            var totalMembers = _modelRepository.MemberModelDbSet.LongCount();
+            var totalPages = (totalMembers + (membersPerPage - 1)) / membersPerPage;
+            if (totalMembers > 0 && pageNumber > 0)
+            {
+                var memberModelsOnPage =
+                    await _modelRepository.MemberModelDbSet
+                        .Skip(membersPerPage * (pageNumber - 1))
+                        .Take(membersPerPage)
+                        .ToListAsync();
+
+                return new Page<Member>(pageNumber, membersPerPage, totalPages, totalMembers,
+                        memberModelsOnPage.Select(memberModel => new Member(memberModel))
+                        .ToList());
+            }
+
+            return new Page<Member>(pageNumber, membersPerPage, totalPages, totalMembers, new List<Member>());
         }
     }
 }

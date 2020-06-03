@@ -1,4 +1,5 @@
-﻿using Rang.Demo.CleanArchitecture.Domain.Entity;
+﻿using Rang.Demo.CleanArchitecture.Application.Common;
+using Rang.Demo.CleanArchitecture.Domain.Entity;
 using System.Threading.Tasks;
 
 namespace Rang.Demo.CleanArchitecture.Application.Infrastructure.PlugIn
@@ -10,5 +11,6 @@ namespace Rang.Demo.CleanArchitecture.Application.Infrastructure.PlugIn
 
         //read
         Task<Member> GetMemberByCodenameAsync(string codename);
+        Task<Page<Member>> GetMembersByPageAsync(int pageNumber, int membersPerPage);
     }
 }

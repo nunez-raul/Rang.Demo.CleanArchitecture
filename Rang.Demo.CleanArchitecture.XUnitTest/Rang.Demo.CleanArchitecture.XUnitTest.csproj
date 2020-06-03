@@ -14,10 +14,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="ApplicationTests\" />
-  </ItemGroup>
-
-  <ItemGroup>
     <ProjectReference Include="..\Rang.Demo.CleanArchitecture.Application\Rang.Demo.CleanArchitecture.Application.csproj" />
     <ProjectReference Include="..\Rang.Demo.CleanArchitecture.Domain\Rang.Demo.CleanArchitecture.Domain.csproj" />
     <ProjectReference Include="..\Rang.Demo.CleanArchitecture.Persistence.Ef\Rang.Demo.CleanArchitecture.Persistence.Ef.csproj" />
