@@ -10,7 +10,7 @@ namespace Rang.Demo.CleanArchitecture.Application.UseCase.Out
 
         //properties
         public Guid Id { get => _model.Id; }
-        public string Codename { get => _model.Codename; }
+        public string Username { get => _model.Username; }
 
         public AddMemberOutputModel(MemberModel model)
         {

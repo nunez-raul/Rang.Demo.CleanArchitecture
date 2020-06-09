@@ -10,7 +10,7 @@ namespace Rang.Demo.CleanArchitecture.Application.Infrastructure.PlugIn
         Task<Member> AddMemberAsync(Member member);
 
         //read
-        Task<Member> GetMemberByCodenameAsync(string codename);
+        Task<Member> GetMemberByUsernameAsync(string username);
         Task<Page<Member>> GetMembersByPageAsync(int pageNumber, int membersPerPage);
     }
 }

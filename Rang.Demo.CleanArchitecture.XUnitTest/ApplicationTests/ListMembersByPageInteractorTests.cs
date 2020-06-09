@@ -130,7 +130,7 @@ namespace Rang.Demo.CleanArchitecture.XUnitTest.ApplicationTests
             var members = new List<Member>();
             for (int i = 1; i < 100; i++)
             {
-                members.Add(new Member { Codename = string.Format("Agent{0}", i) });
+                members.Add(new Member { Username = string.Format("Agent{0}", i) });
             }
             IEntityGateway entityGateway = await InMemoryEntityGatewayFactory.CreateEntityGatewayAsync(members.ToArray());
             IListMembersByPagePresenter presenter = new FakeListMembersByPagePresenter(_output);
@@ -158,7 +158,7 @@ namespace Rang.Demo.CleanArchitecture.XUnitTest.ApplicationTests
             var members = new List<Member>();
             for (int i = 1; i < 100; i++)
             {
-                members.Add(new Member { Codename = string.Format("Agent{0}", i) });
+                members.Add(new Member { Username = string.Format("Agent{0}", i) });
             }
             IEntityGateway entityGateway = await InMemoryEntityGatewayFactory.CreateEntityGatewayAsync(members.ToArray());
             IListMembersByPagePresenter presenter = new FakeListMembersByPagePresenter(_output);
@@ -186,7 +186,7 @@ namespace Rang.Demo.CleanArchitecture.XUnitTest.ApplicationTests
             var members = new List<Member>();
             for (int i = 1; i < 100; i++)
             {
-                members.Add(new Member { Codename = string.Format("Agent{0}", i) });
+                members.Add(new Member { Username = string.Format("Agent{0}", i) });
             }
             IEntityGateway entityGateway = await InMemoryEntityGatewayFactory.CreateEntityGatewayAsync(members.ToArray());
             IListMembersByPagePresenter presenter = new FakeListMembersByPagePresenter(_output);
@@ -214,7 +214,7 @@ namespace Rang.Demo.CleanArchitecture.XUnitTest.ApplicationTests
             var members = new List<Member>();
             for (int i = 1; i < 100; i++)
             {
-                members.Add(new Member { Codename = string.Format("Agent{0}", i) });
+                members.Add(new Member { Username = string.Format("Agent{0}", i) });
             }
             IEntityGateway entityGateway = await InMemoryEntityGatewayFactory.CreateEntityGatewayAsync(members.ToArray());
             IListMembersByPagePresenter presenter = new FakeListMembersByPagePresenter(_output);
@@ -242,7 +242,7 @@ namespace Rang.Demo.CleanArchitecture.XUnitTest.ApplicationTests
             var members = new List<Member>();
             for (int i = 1; i < 100; i++)
             {
-                members.Add(new Member { Codename = string.Format("Agent{0}", i) });
+                members.Add(new Member { Username = string.Format("Agent{0}", i) });
             }
             IEntityGateway entityGateway = await InMemoryEntityGatewayFactory.CreateEntityGatewayAsync(members.ToArray());
             IListMembersByPagePresenter presenter = new FakeListMembersByPagePresenter(_output);

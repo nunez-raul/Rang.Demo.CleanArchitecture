@@ -3,6 +3,6 @@
     public class MemberModel : BaseModel
     {
         //properties
-        public string Codename { get; set; }
+        public string Username { get; set; }
     }
 }

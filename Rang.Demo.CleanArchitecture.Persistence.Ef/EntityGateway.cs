@@ -31,10 +31,10 @@ namespace Rang.Demo.CleanArchitecture.Persistence.Ef
             return member;
         }
 
-        public async Task<Member> GetMemberByCodenameAsync(string codename)
+        public async Task<Member> GetMemberByUsernameAsync(string username)
         {
             var model = await _modelRepository.MemberModelDbSet
-                .Where(m => m.Codename == codename).FirstOrDefaultAsync();
+                .Where(m => m.Username == username).FirstOrDefaultAsync();
 
             return model != null
                 ? new Member(model)

@@ -16,7 +16,7 @@ namespace Rang.Demo.CleanArchitecture.XUnitTest.DomainTests
 
             //act
             var entity = await Task<Member>.Factory.StartNew(() => new Member());
-            entity.Codename = "Black Sheep";
+            entity.Username = "Black Sheep";
 
             //assert
             Assert.NotNull(entity);
@@ -29,7 +29,7 @@ namespace Rang.Demo.CleanArchitecture.XUnitTest.DomainTests
         public async Task CreateMember_Success_Constructor1()
         {
             //arrange
-            var model = new MemberModel { Codename = "Balck Sheep" };
+            var model = new MemberModel { Username = "Balck Sheep" };
 
             //act
             var entity = await Task<Member>.Factory.StartNew(() => new Member(model));
@@ -54,10 +54,10 @@ namespace Rang.Demo.CleanArchitecture.XUnitTest.DomainTests
         }
 
         [Fact]
-        public async Task CreateMember_FailedModelValidation_NullCodename()
+        public async Task CreateMember_FailedModelValidation_NullUsername()
         {
             //arrange
-            var model = new MemberModel { Codename = null };
+            var model = new MemberModel { Username = null };
 
             //act
             var entity = await Task<Member>.Factory.StartNew(() => new Member(model));
@@ -69,10 +69,10 @@ namespace Rang.Demo.CleanArchitecture.XUnitTest.DomainTests
         }
 
         [Fact]
-        public async Task CreateMember_FailedModelValidation_EmptyCodename()
+        public async Task CreateMember_FailedModelValidation_EmptyUsername()
         {
             //arrange
-            var model = new MemberModel { Codename = string.Empty };
+            var model = new MemberModel { Username = string.Empty };
 
             //act
             var entity = await Task<Member>.Factory.StartNew(() => new Member(model));
@@ -84,10 +84,10 @@ namespace Rang.Demo.CleanArchitecture.XUnitTest.DomainTests
         }
 
         [Fact]
-        public async Task CreateMember_FailedModelValidation_BlankCodename()
+        public async Task CreateMember_FailedModelValidation_BlankUsername()
         {
             //arrange
-            var model = new MemberModel { Codename = " " };
+            var model = new MemberModel { Username = " " };
 
             //act
             var entity = await Task<Member>.Factory.StartNew(() => new Member(model));
@@ -99,10 +99,10 @@ namespace Rang.Demo.CleanArchitecture.XUnitTest.DomainTests
         }
 
         [Fact]
-        public async Task CreateMember_FailedModelValidation_ExeedingLengthCodename()
+        public async Task CreateMember_FailedModelValidation_ExeedingLengthUsername()
         {
             //arrange
-            var model = new MemberModel { Codename = new string('*', Member.CODENAME_MAX_LENGTH + 1) };
+            var model = new MemberModel { Username = new string('*', Member.USERNAME_MAX_LENGTH + 1) };
 
             //act
             var entity = await Task<Member>.Factory.StartNew(() => new Member(model));

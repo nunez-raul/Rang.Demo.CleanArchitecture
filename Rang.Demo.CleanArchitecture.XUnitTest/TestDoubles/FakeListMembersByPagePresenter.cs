@@ -19,7 +19,7 @@ namespace Rang.Demo.CleanArchitecture.XUnitTest.TestDoubles
             _output.WriteLine("Members: ");
             foreach (var item in inputModel.Page.Items)
             {
-                _output.WriteLine(item.Codename);
+                _output.WriteLine(item.Username);
             }
         }
     }

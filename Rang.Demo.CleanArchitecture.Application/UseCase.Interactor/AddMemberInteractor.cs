@@ -71,7 +71,7 @@ namespace Rang.Demo.CleanArchitecture.Application.UseCase.Interactor
         }
         protected virtual async Task<bool> IsMemberAlreadyStoredAsync(Member member)
         {
-            var existingMember = await _entityGateway.GetMemberByCodenameAsync(member.Codename);
+            var existingMember = await _entityGateway.GetMemberByUsernameAsync(member.Username);
             return existingMember != null;
         }
         protected virtual void PresentDuplicatedResult(AddMemberOutputModel outputModel)

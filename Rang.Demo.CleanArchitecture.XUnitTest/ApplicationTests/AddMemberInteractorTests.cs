@@ -84,7 +84,7 @@ namespace Rang.Demo.CleanArchitecture.XUnitTest.ApplicationTests
         }
 
         [Fact]
-        public async Task AddMemberAsync_FailedModelValidation_NullCodename()
+        public async Task AddMemberAsync_FailedModelValidation_NullUsername()
         {
             //arrange
             IEntityGateway entityGateway = await InMemoryEntityGatewayFactory.CreateEntityGateway();
@@ -105,11 +105,11 @@ namespace Rang.Demo.CleanArchitecture.XUnitTest.ApplicationTests
         public async Task AddMemberAsync_CommandResult_DuplicateMember()
         {
             //arrange
-            var members = new Member[] { new Member { Codename = "blacksheep" } };
+            var members = new Member[] { new Member { Username = "blacksheep" } };
             IEntityGateway entityGateway = await InMemoryEntityGatewayFactory.CreateEntityGatewayAsync(members);
             IAddMemberPresenter presenter = new FakeAddMemberPresenter(_output);
             IAddMemberInteractor interactor = new AddMemberInteractor(presenter, entityGateway);
-            AddMemberInputModel inputModel = new AddMemberInputModel { Codename = "blacksheep" };
+            AddMemberInputModel inputModel = new AddMemberInputModel { Username = "blacksheep" };
 
             //act
             var result = await interactor.AddMemberAsync(inputModel);
@@ -126,7 +126,7 @@ namespace Rang.Demo.CleanArchitecture.XUnitTest.ApplicationTests
             IEntityGateway entityGateway = await InMemoryEntityGatewayFactory.CreateEntityGateway();
             IAddMemberPresenter presenter = new FakeAddMemberPresenter(_output);
             IAddMemberInteractor interactor = new AddMemberInteractor(presenter, entityGateway);
-            AddMemberInputModel inputModel = new AddMemberInputModel { Codename = "blacksheep" };
+            AddMemberInputModel inputModel = new AddMemberInputModel { Username = "blacksheep" };
 
             //act
             var result = await interactor.AddMemberAsync(inputModel);

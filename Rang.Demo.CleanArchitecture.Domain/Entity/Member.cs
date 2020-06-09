@@ -8,11 +8,11 @@ namespace Rang.Demo.CleanArchitecture.Domain.Entity
     public class Member : BaseEntity<MemberModel>
     {
         //fields
-        public const int CODENAME_MAX_LENGTH = 100;
+        public const int USERNAME_MAX_LENGTH = 100;
 
         //properties
         public Guid Id { get => _model.Id; }
-        public string Codename { get => _model.Codename; set => _model.Codename = value; }
+        public string Username { get => _model.Username; set => _model.Username = value; }
 
         //constructors
         public Member()
@@ -36,15 +36,15 @@ namespace Rang.Demo.CleanArchitecture.Domain.Entity
         {
             var baseMessage = "The supplied {0} exceeded maximum length allowed of: {1}.";
 
-            if (Codename == null || string.IsNullOrWhiteSpace(Codename))
+            if (Username == null || string.IsNullOrWhiteSpace(Username))
             {
-                AddModelValidationError(ModelValidationStatusCode.RequiredInformationMissing, "codename is a required field.");
+                AddModelValidationError(ModelValidationStatusCode.RequiredInformationMissing, "username is a required field.");
             }
             else
             {
-                if (Codename.Trim().Length > CODENAME_MAX_LENGTH)
+                if (Username.Trim().Length > USERNAME_MAX_LENGTH)
                 {
-                    AddModelValidationError(ModelValidationStatusCode.CapacityExceeded, string.Format(baseMessage, "codename", CODENAME_MAX_LENGTH));
+                    AddModelValidationError(ModelValidationStatusCode.CapacityExceeded, string.Format(baseMessage, "username", USERNAME_MAX_LENGTH));
                 }
             }
 

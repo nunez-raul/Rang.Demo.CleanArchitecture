@@ -8,7 +8,7 @@ namespace Rang.Demo.CleanArchitecture.Application.UseCase.In
         protected MemberModel _model;
 
         //properties
-        public string Codename { get => _model.Codename; set => _model.Codename = value; }
+        public string Username { get => _model.Username; set => _model.Username = value; }
 
         //constructors
         public AddMemberInputModel()

@@ -12,8 +12,8 @@ namespace Rang.Demo.CleanArchitecture.Persistence.Ef.Ef.TypeConfig
             builder.ToTable("Members").HasKey(e => e.Id);
 
             builder.Property(e => e.Id).IsRequired();
-            builder.Property(e => e.Codename)
-                .HasMaxLength(Member.CODENAME_MAX_LENGTH)
+            builder.Property(e => e.Username)
+                .HasMaxLength(Member.USERNAME_MAX_LENGTH)
                 .IsRequired(false);
         }
     }
