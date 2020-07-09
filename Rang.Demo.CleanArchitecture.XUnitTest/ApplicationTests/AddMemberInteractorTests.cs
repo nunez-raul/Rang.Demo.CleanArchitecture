@@ -102,14 +102,34 @@ namespace Rang.Demo.CleanArchitecture.XUnitTest.ApplicationTests
         }
 
         [Fact]
-        public async Task AddMemberAsync_CommandResult_DuplicateMember()
+        public async Task AddMemberAsyncExistingMemberUsernameSameCase_CommandResult_DuplicateEntry()
         {
             //arrange
-            var members = new Member[] { new Member { Username = "blacksheep" } };
+            string duplicatedMemberUsername = "blacksheep";
+            var members = new Member[] { new Member { Username = duplicatedMemberUsername } };
             IEntityGateway entityGateway = await InMemoryEntityGatewayFactory.CreateEntityGatewayAsync(members);
             IAddMemberPresenter presenter = new FakeAddMemberPresenter(_output);
             IAddMemberInteractor interactor = new AddMemberInteractor(presenter, entityGateway);
-            AddMemberInputModel inputModel = new AddMemberInputModel { Username = "blacksheep" };
+            AddMemberInputModel inputModel = new AddMemberInputModel { Username = duplicatedMemberUsername };
+
+            //act
+            var result = await interactor.AddMemberAsync(inputModel);
+
+            //assert
+            Assert.NotNull(result);
+            Assert.True(result.Status == Application.Common.CommandResultStatusCode.DuplicateEntry);
+        }
+
+        [Fact]
+        public async Task AddMemberAsyncExistingMemberUsernameDifferentCase_CommandResult_DuplicateEntry()
+        {
+            //arrange
+            string duplicatedMemberUsername = "blacksheep";
+            var members = new Member[] { new Member { Username = duplicatedMemberUsername } };
+            IEntityGateway entityGateway = await InMemoryEntityGatewayFactory.CreateEntityGatewayAsync(members);
+            IAddMemberPresenter presenter = new FakeAddMemberPresenter(_output);
+            IAddMemberInteractor interactor = new AddMemberInteractor(presenter, entityGateway);
+            AddMemberInputModel inputModel = new AddMemberInputModel { Username = duplicatedMemberUsername.ToUpperInvariant() };
 
             //act
             var result = await interactor.AddMemberAsync(inputModel);

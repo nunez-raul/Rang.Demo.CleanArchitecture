@@ -8,9 +8,12 @@ namespace Rang.Demo.CleanArchitecture.Application.Infrastructure.PlugIn
     {
         //write
         Task<Member> AddMemberAsync(Member member);
+        Task<Club> AddClubAsync(Club club);
 
         //read
         Task<Member> GetMemberByUsernameAsync(string username);
         Task<Page<Member>> GetMembersByPageAsync(int pageNumber, int membersPerPage);
+
+        Task<Club> GetClubByNameAsync(string name);
     }
 }

@@ -11,14 +11,14 @@ namespace Rang.Demo.CleanArchitecture.XUnitTest.TestDoubles
             : base(output) { }
 
         //methods
-        public void PresentDuplicatedResult(AddMemberOutputModel inputModel)
+        public void PresentDuplicatedResult(AddMemberOutputModel outputModel)
         {
-            _output.WriteLine(string.Format("Couldn't add member with username \"{0}\" because there is another member using that username.", inputModel.Username));
+            _output.WriteLine(string.Format("Couldn't add member with username \"{0}\" because there is another member using that username.", outputModel.Username));
         }
 
-        public void PresentSuccessfulResult(AddMemberOutputModel inputModel)
+        public void PresentSuccessfulResult(AddMemberOutputModel outputModel)
         {
-            _output.WriteLine(string.Format("Added new member with username \"{0}\" successfully.", inputModel.Username));
+            _output.WriteLine(string.Format("Added new member with username \"{0}\" successfully.", outputModel.Username));
         }
     }
 }

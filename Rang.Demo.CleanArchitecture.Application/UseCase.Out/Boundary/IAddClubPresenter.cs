@@ -3,10 +3,10 @@ using System.Collections.Generic;
 
 namespace Rang.Demo.CleanArchitecture.Application.UseCase.Out.Boundary
 {
-    public interface IAddMemberPresenter
+    public interface IAddClubPresenter
     {
         void PresentValidationErrors(IDictionary<ModelValidationStatusCode, List<string>> modelValidationErrors);
-        void PresentDuplicatedResult(AddMemberOutputModel outputModel);
-        void PresentSuccessfulResult(AddMemberOutputModel outputModel);
+        void PresentDuplicatedResult(AddClubOutputModel outputModel);
+        void PresentSuccessfulResult(AddClubOutputModel outputModel);
     }
 }

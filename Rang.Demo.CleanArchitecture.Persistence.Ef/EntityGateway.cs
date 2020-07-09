@@ -34,7 +34,7 @@ namespace Rang.Demo.CleanArchitecture.Persistence.Ef
         public async Task<Member> GetMemberByUsernameAsync(string username)
         {
             var model = await _modelRepository.MemberModelDbSet
-                .Where(m => m.Username == username).FirstOrDefaultAsync();
+                .Where(m => m.Username.ToLowerInvariant() == username.ToLowerInvariant()).FirstOrDefaultAsync();
 
             return model != null
                 ? new Member(model)
@@ -64,6 +64,26 @@ namespace Rang.Demo.CleanArchitecture.Persistence.Ef
             }
 
             return new Page<Member>(pageNumber, membersPerPage, totalPages, totalMembers, new List<Member>());
+        }
+
+
+        public async Task<Club> AddClubAsync(Club club)
+        {
+            var clubModel = club.GetModel();
+            _modelRepository.ClubModelDbSet.Add(clubModel);
+            await _modelRepository.SaveChangesAsync().ConfigureAwait(false);
+
+            return club;
+        }
+
+        public async Task<Club> GetClubByNameAsync(string name)
+        {
+            var model = await _modelRepository.ClubModelDbSet
+               .Where(c => c.Name.ToLowerInvariant() == name.ToLowerInvariant()).FirstOrDefaultAsync();
+
+            return model != null
+                ? new Club(model)
+                : null;
         }
     }
 }
