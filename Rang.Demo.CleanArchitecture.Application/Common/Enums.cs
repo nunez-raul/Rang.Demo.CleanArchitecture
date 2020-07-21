@@ -6,22 +6,7 @@
         InvalidInput,
         FailedModelValidation,
         DuplicateEntry,
-        OverlappingRanges,
-        UserNotFound,
-        FeedbackReceiverNotFound,
-        FeedbackReceiverMissing,
-        FeedbackGiverNotFound,
-        FeedbackGiverMissing,
-        FeedbackPeriodNotFound,
-        AppraisalNotFound,
-        FeedbackNotFound,
-        EvaluationDone,
-        EntityNotUpdatable,
-        EntityNotDeletable,
-        InvitationExpired,
-        InvitationNotFound,
-        SomeFeedbackGiversInListNotFound,
-        SomeFeedbackReceiversInListNotFound,
-        SomeFeedbackPeriodsInListNotFound
+        MissingClub,
+        MissingMembersToAdd
     }
 }
