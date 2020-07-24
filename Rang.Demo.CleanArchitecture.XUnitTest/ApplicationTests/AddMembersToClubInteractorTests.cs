@@ -101,13 +101,50 @@ namespace Rang.Demo.CleanArchitecture.XUnitTest.ApplicationTests
         }
 
         [Fact]
-        public async Task AddMembersToClubAsync_CommandResult_MissingMembersToAdd()
+        public async Task AddMembersToClubAsync_CommandResult_MissingClub2()
         {
             //arrange
             IEntityGateway entityGateway = await InMemoryEntityGatewayFactory.CreateEntityGateway();
             IAddMembersToClubPresenter presenter = new FakeAddMembersToClubPresenter(_output);
             IAddMembersToClubInteractor interactor = new AddMembersToClubInteractor(presenter, entityGateway);
-            AddMembersToClubInputModel inputModel = new AddMembersToClubInputModel { ClubModel = new Domain.Model.ClubModel { Name = "C# Knights" } };
+            AddMembersToClubInputModel inputModel = new AddMembersToClubInputModel { ClubModel = new Domain.Model.ClubModel()};
+
+            //act
+            var result = await interactor.AddMembersToClubAsync(inputModel);
+
+            //assert
+            Assert.NotNull(result);
+            Assert.True(result.Status == Application.Common.CommandResultStatusCode.MissingClub);
+        }
+
+        [Fact]
+        public async Task AddMembersToClubAsync_CommandResult_MissingMembersToAdd()
+        {
+            //arrange
+            string existingClubName = "C# Knights";
+            var clubsToPreload = new Club[] { new Club { Name = existingClubName } };
+            IEntityGateway entityGateway = await InMemoryEntityGatewayFactory.CreateEntityGatewayAsync(clubsToPreload);
+            IAddMembersToClubPresenter presenter = new FakeAddMembersToClubPresenter(_output);
+            IAddMembersToClubInteractor interactor = new AddMembersToClubInteractor(presenter, entityGateway);
+            AddMembersToClubInputModel inputModel = new AddMembersToClubInputModel { ClubModel = new Domain.Model.ClubModel { Name = existingClubName } };
+
+            //act
+            var result = await interactor.AddMembersToClubAsync(inputModel);
+
+            //assert
+            Assert.NotNull(result);
+            Assert.True(result.Status == Application.Common.CommandResultStatusCode.MissingMembersToAdd);
+        }
+        [Fact]
+        public async Task AddMembersToClubAsync_CommandResult_MissingMembersToAdd2()
+        {
+            //arrange
+            string existingClubName = "C# Knights";
+            var clubsToPreload = new Club[] { new Club { Name = existingClubName } };
+            IEntityGateway entityGateway = await InMemoryEntityGatewayFactory.CreateEntityGatewayAsync(clubsToPreload);
+            IAddMembersToClubPresenter presenter = new FakeAddMembersToClubPresenter(_output);
+            IAddMembersToClubInteractor interactor = new AddMembersToClubInteractor(presenter, entityGateway);
+            AddMembersToClubInputModel inputModel = new AddMembersToClubInputModel { ClubModel = new Domain.Model.ClubModel { Name = existingClubName }, MemberModelsToAdd = null };
 
             //act
             var result = await interactor.AddMembersToClubAsync(inputModel);

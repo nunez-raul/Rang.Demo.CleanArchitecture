@@ -125,8 +125,8 @@ namespace Rang.Demo.CleanArchitecture.XUnitTest.ApplicationTests
         {
             //arrange
             string duplicatedClubName = "C# Knights";
-            var clubs = new Club[] { new Club { Name = duplicatedClubName } };
-            IEntityGateway entityGateway = await InMemoryEntityGatewayFactory.CreateEntityGatewayAsync(clubs);
+            var clubsToPreload = new Club[] { new Club { Name = duplicatedClubName } };
+            IEntityGateway entityGateway = await InMemoryEntityGatewayFactory.CreateEntityGatewayAsync(clubsToPreload);
             IAddClubPresenter presenter = new FakeAddClubPresenter(_output);
             IAddClubInteractor interactor = new AddClubInteractor(presenter, entityGateway);
             AddClubInputModel inputModel = new AddClubInputModel { Name = duplicatedClubName.ToLowerInvariant() };

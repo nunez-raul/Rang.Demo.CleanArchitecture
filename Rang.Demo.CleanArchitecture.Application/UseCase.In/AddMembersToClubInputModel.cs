@@ -1,6 +1,5 @@
 ﻿using Rang.Demo.CleanArchitecture.Domain.Model;
 using System.Collections.Generic;
-using System.Linq;
 
 namespace Rang.Demo.CleanArchitecture.Application.UseCase.In
 {
@@ -12,7 +11,7 @@ namespace Rang.Demo.CleanArchitecture.Application.UseCase.In
 
         //properties
         public ClubModel ClubModel { get => _clubModel; set => _clubModel = value; }
-        public IList<MemberModel> MemberModelsToAdd { get => _memberModelsToAdd.ToArray(); set => _memberModelsToAdd = value; } 
+        public IList<MemberModel> MemberModelsToAdd { get => _memberModelsToAdd; set => _memberModelsToAdd = value; } 
 
         //constructors
         public AddMembersToClubInputModel()

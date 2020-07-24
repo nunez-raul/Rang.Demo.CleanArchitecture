@@ -4,6 +4,7 @@ using Rang.Demo.CleanArchitecture.Application.UseCase.In;
 using Rang.Demo.CleanArchitecture.Application.UseCase.In.Boundary;
 using Rang.Demo.CleanArchitecture.Application.UseCase.Out;
 using Rang.Demo.CleanArchitecture.Application.UseCase.Out.Boundary;
+using Rang.Demo.CleanArchitecture.Domain.Entity;
 using System;
 using System.Linq;
 using System.Threading.Tasks;
@@ -16,6 +17,7 @@ namespace Rang.Demo.CleanArchitecture.Application.UseCase.Interactor
         // fields
         protected IAddMembersToClubPresenter _presenter;
         protected AddMembersToClubInputModel _inputModel;
+        protected Club _club;
 
         // constructor
         public AddMembersToClubInteractor(IAddMembersToClubPresenter presenter, IEntityGateway entityGateway)
@@ -51,10 +53,15 @@ namespace Rang.Demo.CleanArchitecture.Application.UseCase.Interactor
                 };
             }
 
+            if(await LoadClubByNameAsync())
+            {
+
+            }
+
             throw new NotImplementedException();
         }
 
-        protected bool IsClubMissingFromInput()
+        protected virtual bool IsClubMissingFromInput()
         {
             if(_inputModel.ClubModel == null || 
                 ((_inputModel.ClubModel.Id == null || _inputModel.ClubModel.Id == Guid.Empty) && string.IsNullOrWhiteSpace(_inputModel.ClubModel.Name)))
@@ -63,6 +70,13 @@ namespace Rang.Demo.CleanArchitecture.Application.UseCase.Interactor
             }
 
             return false;
+        }
+
+        protected virtual async Task<bool> LoadClubByNameAsync()
+        {
+            _club = await _entityGateway.GetClubByNameAsync(_inputModel.ClubModel.Name);
+            
+            return _club != null;
         }
 
         protected bool AreMembersToAddMissingFromInput()
