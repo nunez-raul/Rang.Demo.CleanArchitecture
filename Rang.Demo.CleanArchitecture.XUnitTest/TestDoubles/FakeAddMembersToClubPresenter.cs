@@ -25,5 +25,15 @@ namespace Rang.Demo.CleanArchitecture.XUnitTest.TestDoubles
         {
             _output.WriteLine(message);
         }
+
+        public void PresentWarningMessage(string message)
+        {
+            _output.WriteLine(message);
+        }
+
+        public void PresentInformationMessage(string message)
+        {
+            _output.WriteLine(message);
+        }
     }
 }

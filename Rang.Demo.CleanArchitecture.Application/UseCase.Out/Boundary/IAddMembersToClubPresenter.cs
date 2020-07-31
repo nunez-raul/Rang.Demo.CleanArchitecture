@@ -9,5 +9,7 @@ namespace Rang.Demo.CleanArchitecture.Application.UseCase.Out.Boundary
         void PresentDuplicatedResult(AddMembersToClubOutputModel outputModel);
         void PresentSuccessfulResult(AddMembersToClubOutputModel outputModel);
         void PresentErrorMessage(string message);
+        void PresentWarningMessage(string message);
+        void PresentInformationMessage(string message);
     }
 }

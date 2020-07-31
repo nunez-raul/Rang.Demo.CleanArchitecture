@@ -7,6 +7,9 @@
         FailedModelValidation,
         DuplicateEntry,
         MissingClub,
-        MissingMembersToAdd
+        MissingMembersToAdd,
+        ClubNotFound,
+        MemberNotFound,
+        MembersInListNotFound
     }
 }

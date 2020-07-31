@@ -41,6 +41,36 @@ namespace Rang.Demo.CleanArchitecture.Persistence.Ef
                 : null;
         }
 
+        public async Task<IEnumerable<Member>> GetMembersByListOfIdsAsync(IEnumerable<Guid> ids)
+        {
+            if (ids == null || !ids.Any())
+                return new List<Member>();
+
+            var models = await _modelRepository
+                .MemberModelDbSet
+                .Where(memberModel => ids.Contains(memberModel.Id))
+                .ToListAsync();
+
+            return models.Any()
+                ? models.Select(memberModel => new Member(memberModel))
+                : new List<Member>();
+        }
+
+        public async Task<IEnumerable<Member>> GetMembersByListOfUsernamesAsync(IEnumerable<string> userNames)
+        {
+            if (userNames == null || !userNames.Any())
+                return new List<Member>();
+
+            var models = await _modelRepository
+                .MemberModelDbSet
+                .Where(memberModel => userNames.Select(n => n.ToLowerInvariant()).Contains(memberModel.Username.ToLowerInvariant()))
+                .ToListAsync();
+
+            return models.Any() 
+                ? models.Select(memberModel => new Member(memberModel))
+                : new List<Member>();
+        }
+
         public async Task<Page<Member>> GetMembersByPageAsync(int pageNumber, int membersPerPage)
         {
             if (membersPerPage == 0)
@@ -66,7 +96,6 @@ namespace Rang.Demo.CleanArchitecture.Persistence.Ef
             return new Page<Member>(pageNumber, membersPerPage, totalPages, totalMembers, new List<Member>());
         }
 
-
         public async Task<Club> AddClubAsync(Club club)
         {
             var clubModel = club.GetModel();
@@ -74,6 +103,16 @@ namespace Rang.Demo.CleanArchitecture.Persistence.Ef
             await _modelRepository.SaveChangesAsync().ConfigureAwait(false);
 
             return club;
+        }
+
+        public async Task<Club> GetClubByIdAsync(Guid Id)
+        {
+            var model = await _modelRepository.ClubModelDbSet
+               .Where(c => c.Id == Id).FirstOrDefaultAsync();
+
+            return model != null
+                ? new Club(model)
+                : null;
         }
 
         public async Task<Club> GetClubByNameAsync(string name)
