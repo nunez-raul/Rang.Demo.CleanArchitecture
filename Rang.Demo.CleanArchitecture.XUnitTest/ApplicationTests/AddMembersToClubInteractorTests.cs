@@ -27,42 +27,42 @@ namespace Rang.Demo.CleanArchitecture.XUnitTest.ApplicationTests
 
         // methods
         [Fact]
-        public async Task CreateInteractor_ThrowsException_NullGateway()
+        public void CreateInteractor_ThrowsException_NullGateway()
         {
             //arrange
             IEntityGateway entityGateway = null;
             IAddMembersToClubPresenter presenter = new FakeAddMembersToClubPresenter(_output);
 
             //act
-            async Task<AddMembersToClubInteractor> function() => await Task<AddMembersToClubInteractor>.Factory.StartNew(() => new AddMembersToClubInteractor(presenter, entityGateway));
+            Action action = () => new AddMembersToClubInteractor(presenter, entityGateway);
 
             //assert
-            await Assert.ThrowsAsync<ArgumentNullException>(function);
+            Assert.Throws<ArgumentNullException>(action);
         }
 
         [Fact]
-        public async Task CreateInteractor_ThrowsException_NullPresenter()
+        public void CreateInteractor_ThrowsException_NullPresenter()
         {
             //arrange
-            IEntityGateway entityGateway = await InMemoryEntityGatewayFactory.CreateEntityGateway();
+            IEntityGateway entityGateway = InMemoryEntityGatewayFactory.CreateEntityGateway();
             IAddMembersToClubPresenter presenter = null;
 
             //act
-            async Task<AddMembersToClubInteractor> function() => await Task<AddMembersToClubInteractor>.Factory.StartNew(() => new AddMembersToClubInteractor(presenter, entityGateway));
+            Action action = () => new AddMembersToClubInteractor(presenter, entityGateway);
 
             //assert
-            await Assert.ThrowsAsync<ArgumentNullException>(function);
+            Assert.Throws<ArgumentNullException>(action);
         }
 
         [Fact]
-        public async Task CreateInteractor_Success()
+        public void CreateInteractor_Success()
         {
             //arrange
-            IEntityGateway entityGateway = await InMemoryEntityGatewayFactory.CreateEntityGateway();
+            IEntityGateway entityGateway = InMemoryEntityGatewayFactory.CreateEntityGateway();
             IAddMembersToClubPresenter presenter = new FakeAddMembersToClubPresenter(_output);
 
             //act
-            var interactor = await Task<AddMembersToClubInteractor>.Factory.StartNew(() => new AddMembersToClubInteractor(presenter, entityGateway));
+            var interactor = new AddMembersToClubInteractor(presenter, entityGateway);
 
             //assert
             Assert.NotNull(interactor);
@@ -72,7 +72,7 @@ namespace Rang.Demo.CleanArchitecture.XUnitTest.ApplicationTests
         public async Task AddMembersToClubAsync_ThrowsException_NullInput()
         {
             //arrange
-            IEntityGateway entityGateway = await InMemoryEntityGatewayFactory.CreateEntityGateway();
+            IEntityGateway entityGateway = InMemoryEntityGatewayFactory.CreateEntityGateway();
             IAddMembersToClubPresenter presenter = new FakeAddMembersToClubPresenter(_output);
             IAddMembersToClubInteractor interactor = new AddMembersToClubInteractor(presenter, entityGateway);
             AddMembersToClubInputModel inputModel = null;
@@ -88,7 +88,7 @@ namespace Rang.Demo.CleanArchitecture.XUnitTest.ApplicationTests
         public async Task AddMembersToClubAsync_CommandResult_MissingClubFromInput1()
         {
             //arrange
-            IEntityGateway entityGateway = await InMemoryEntityGatewayFactory.CreateEntityGateway();
+            IEntityGateway entityGateway = InMemoryEntityGatewayFactory.CreateEntityGateway();
             IAddMembersToClubPresenter presenter = new FakeAddMembersToClubPresenter(_output);
             IAddMembersToClubInteractor interactor = new AddMembersToClubInteractor(presenter, entityGateway);
             AddMembersToClubInputModel inputModel = new AddMembersToClubInputModel();
@@ -105,7 +105,7 @@ namespace Rang.Demo.CleanArchitecture.XUnitTest.ApplicationTests
         public async Task AddMembersToClubAsync_CommandResult_MissingClubFromInput2()
         {
             //arrange
-            IEntityGateway entityGateway = await InMemoryEntityGatewayFactory.CreateEntityGateway();
+            IEntityGateway entityGateway = InMemoryEntityGatewayFactory.CreateEntityGateway();
             IAddMembersToClubPresenter presenter = new FakeAddMembersToClubPresenter(_output);
             IAddMembersToClubInteractor interactor = new AddMembersToClubInteractor(presenter, entityGateway);
             AddMembersToClubInputModel inputModel = new AddMembersToClubInputModel { ClubModel = new Domain.Model.ClubModel()};
@@ -197,12 +197,31 @@ namespace Rang.Demo.CleanArchitecture.XUnitTest.ApplicationTests
         }
 
         [Fact]
+        public async Task AddMembersToClubAsync_CommandResult_MembersToAddNotFoundById()
+        {
+            //arrange
+            string existingClubName = "C# Knights";
+            var clubsToPreload = new Club[] { new Club { Name = existingClubName } };
+            var members = new Member[] { new Member( new Domain.Model.MemberModel{ Id = Guid.NewGuid() }) };
+            IEntityGateway entityGateway = await InMemoryEntityGatewayFactory.CreateEntityGatewayAsync(clubsToPreload);
+            IAddMembersToClubPresenter presenter = new FakeAddMembersToClubPresenter(_output);
+            IAddMembersToClubInteractor interactor = new AddMembersToClubInteractor(presenter, entityGateway);
+            AddMembersToClubInputModel inputModel = new AddMembersToClubInputModel { ClubModel = new Domain.Model.ClubModel { Name = existingClubName }, MemberModelsToAdd = members.Select(member => member.GetModel()).ToList() };
+
+            //act
+            var result = await interactor.AddMembersToClubAsync(inputModel);
+
+            //assert
+            Assert.NotNull(result);
+            Assert.True(result.Status == Application.Common.CommandResultStatusCode.MembersInListNotFound);
+        }
+
+        [Fact]
         public async Task AddMembersToClubAsync_CommandResult_MembersToAddNotFoundByUsername()
         {
             //arrange
             string existingClubName = "C# Knights";
             var clubsToPreload = new Club[] { new Club { Name = existingClubName } };
-            string existingMemberUsername = "blacksheep";
             var members = new Member[] { new Member { Username = "whitesheep" } };
             IEntityGateway entityGateway = await InMemoryEntityGatewayFactory.CreateEntityGatewayAsync(clubsToPreload);
             IAddMembersToClubPresenter presenter = new FakeAddMembersToClubPresenter(_output);

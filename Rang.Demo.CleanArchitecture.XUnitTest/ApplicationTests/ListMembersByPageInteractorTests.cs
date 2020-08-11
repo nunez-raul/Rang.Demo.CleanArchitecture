@@ -27,42 +27,42 @@ namespace Rang.Demo.CleanArchitecture.XUnitTest.ApplicationTests
 
         //methods
         [Fact]
-        public async Task CreateInteractor_ThrowsException_NullGateway()
+        public void CreateInteractor_ThrowsException_NullGateway()
         {
             //arrange
             IEntityGateway entityGateway = null;
             IListMembersByPagePresenter presenter = new FakeListMembersByPagePresenter(_output);
 
             //act
-            async Task<ListMembersByPageInteractor> function() => await Task<ListMembersByPageInteractor>.Factory.StartNew(() => new ListMembersByPageInteractor(presenter, entityGateway));
+            Action action = () => new ListMembersByPageInteractor(presenter, entityGateway);
 
             //assert
-            await Assert.ThrowsAsync<ArgumentNullException>(function);
+            Assert.Throws<ArgumentNullException>(action);
         }
 
         [Fact]
-        public async Task CreateInteractor_ThrowsException_NullPresenter()
+        public void CreateInteractor_ThrowsException_NullPresenter()
         {
             //arrange
-            IEntityGateway entityGateway = await InMemoryEntityGatewayFactory.CreateEntityGateway();
+            IEntityGateway entityGateway = InMemoryEntityGatewayFactory.CreateEntityGateway();
             IListMembersByPagePresenter presenter = null;
 
             //act
-            async Task<ListMembersByPageInteractor> function() => await Task<ListMembersByPageInteractor>.Factory.StartNew(() => new ListMembersByPageInteractor(presenter, entityGateway));
+            Action action = () => new ListMembersByPageInteractor(presenter, entityGateway);
 
             //assert
-            await Assert.ThrowsAsync<ArgumentNullException>(function);
+            Assert.Throws<ArgumentNullException>(action);
         }
 
         [Fact]
-        public async Task CreateInteractor_Success()
+        public void CreateInteractor_Success()
         {
             //arrange
-            IEntityGateway entityGateway = await InMemoryEntityGatewayFactory.CreateEntityGateway();
+            IEntityGateway entityGateway = InMemoryEntityGatewayFactory.CreateEntityGateway();
             IListMembersByPagePresenter presenter = new FakeListMembersByPagePresenter(_output);
 
             //act
-            IListMembersByPageInteractor interactor = await Task<ListMembersByPageInteractor>.Factory.StartNew(() => new ListMembersByPageInteractor(presenter, entityGateway));
+            IListMembersByPageInteractor interactor = new ListMembersByPageInteractor(presenter, entityGateway);
 
             //assert
             Assert.NotNull(interactor);
@@ -72,7 +72,7 @@ namespace Rang.Demo.CleanArchitecture.XUnitTest.ApplicationTests
         public async Task ListMembersByPageAsync_ThrowsException_NullInput()
         {
             //arrange
-            IEntityGateway entityGateway = await InMemoryEntityGatewayFactory.CreateEntityGateway();
+            IEntityGateway entityGateway = InMemoryEntityGatewayFactory.CreateEntityGateway();
             IListMembersByPagePresenter presenter = new FakeListMembersByPagePresenter(_output);
             IListMembersByPageInteractor interactor = new ListMembersByPageInteractor(presenter, entityGateway);
             ListMembersByPageInputModel inputModel = null;
@@ -88,7 +88,7 @@ namespace Rang.Demo.CleanArchitecture.XUnitTest.ApplicationTests
         public async Task ListMembersByPageAsync_FailedModelValidation_ZeroMembersPerPage()
         {
             //arrange
-            IEntityGateway entityGateway = await InMemoryEntityGatewayFactory.CreateEntityGateway();
+            IEntityGateway entityGateway = InMemoryEntityGatewayFactory.CreateEntityGateway();
             IListMembersByPagePresenter presenter = new FakeListMembersByPagePresenter(_output);
             IListMembersByPageInteractor interactor = new ListMembersByPageInteractor(presenter, entityGateway);
             ListMembersByPageInputModel inputModel = new ListMembersByPageInputModel { PageNumber = 1, MembersPerPage = 0 };
@@ -106,7 +106,7 @@ namespace Rang.Demo.CleanArchitecture.XUnitTest.ApplicationTests
         public async Task ListMembersByPageAsync_Success_EmptyPage()
         {
             //arrange
-            IEntityGateway entityGateway = await InMemoryEntityGatewayFactory.CreateEntityGateway();
+            IEntityGateway entityGateway = InMemoryEntityGatewayFactory.CreateEntityGateway();
             IListMembersByPagePresenter presenter = new FakeListMembersByPagePresenter(_output);
             IListMembersByPageInteractor interactor = new ListMembersByPageInteractor(presenter, entityGateway);
             ListMembersByPageInputModel inputModel = new ListMembersByPageInputModel { PageNumber = 1, MembersPerPage = 50 };

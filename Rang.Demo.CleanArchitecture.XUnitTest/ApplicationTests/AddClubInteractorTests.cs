@@ -26,42 +26,42 @@ namespace Rang.Demo.CleanArchitecture.XUnitTest.ApplicationTests
 
         //methods
         [Fact]
-        public async Task CreateInteractor_ThrowsException_NullGateway()
+        public void CreateInteractor_ThrowsException_NullGateway()
         {
             //arrange
             IEntityGateway entityGateway = null;
             IAddClubPresenter presenter = new FakeAddClubPresenter(_output);
 
             //act
-            async Task<AddClubInteractor> function() => await Task<AddClubInteractor>.Factory.StartNew(() => new AddClubInteractor(presenter, entityGateway));
+            Action action = () => new AddClubInteractor(presenter, entityGateway);
 
             //assert
-            await Assert.ThrowsAsync<ArgumentNullException>(function);
+            Assert.Throws<ArgumentNullException>(action);
         }
 
         [Fact]
-        public async Task CreateInteractor_ThrowsException_NullPresenter()
+        public void CreateInteractor_ThrowsException_NullPresenter()
         {
             //arrange
-            IEntityGateway entityGateway = await InMemoryEntityGatewayFactory.CreateEntityGateway();
+            IEntityGateway entityGateway = InMemoryEntityGatewayFactory.CreateEntityGateway();
             IAddClubPresenter presenter = null;
 
             //act
-            async Task<AddClubInteractor> function() => await Task<AddClubInteractor>.Factory.StartNew(() => new AddClubInteractor(presenter, entityGateway));
+            Action action = () => new AddClubInteractor(presenter, entityGateway);
 
             //assert
-            await Assert.ThrowsAsync<ArgumentNullException>(function);
+            Assert.Throws<ArgumentNullException>(action);
         }
 
         [Fact]
-        public async Task CreateInteractor_Success()
+        public void CreateInteractor_Success()
         {
             //arrange
-            IEntityGateway entityGateway = await InMemoryEntityGatewayFactory.CreateEntityGateway();
+            IEntityGateway entityGateway = InMemoryEntityGatewayFactory.CreateEntityGateway();
             IAddClubPresenter presenter = new FakeAddClubPresenter(_output);
 
             //act
-            var interactor = await Task<AddClubInteractor>.Factory.StartNew(() => new AddClubInteractor(presenter, entityGateway));
+            var interactor = new AddClubInteractor(presenter, entityGateway);
 
             //assert
             Assert.NotNull(interactor);
@@ -71,7 +71,7 @@ namespace Rang.Demo.CleanArchitecture.XUnitTest.ApplicationTests
         public async Task AddClubAsync_ThrowsException_NullInput()
         {
             //arrange
-            IEntityGateway entityGateway = await InMemoryEntityGatewayFactory.CreateEntityGateway();
+            IEntityGateway entityGateway = InMemoryEntityGatewayFactory.CreateEntityGateway();
             IAddClubPresenter presenter = new FakeAddClubPresenter(_output);
             IAddClubInteractor interactor = new AddClubInteractor(presenter, entityGateway);
             AddClubInputModel inputModel = null;
@@ -87,7 +87,7 @@ namespace Rang.Demo.CleanArchitecture.XUnitTest.ApplicationTests
         public async Task AddClubAsync_FailedModelValidation_NullName()
         {
             //arrange
-            IEntityGateway entityGateway = await InMemoryEntityGatewayFactory.CreateEntityGateway();
+            IEntityGateway entityGateway = InMemoryEntityGatewayFactory.CreateEntityGateway();
             IAddClubPresenter presenter = new FakeAddClubPresenter(_output);
             IAddClubInteractor interactor = new AddClubInteractor(presenter, entityGateway);
             AddClubInputModel inputModel = new AddClubInputModel();
@@ -106,8 +106,8 @@ namespace Rang.Demo.CleanArchitecture.XUnitTest.ApplicationTests
         {
             //arrange
             string duplicatedClubName = "C# Knights";
-            var clubs = new Club[] { new Club { Name = duplicatedClubName } };
-            IEntityGateway entityGateway = await InMemoryEntityGatewayFactory.CreateEntityGatewayAsync(clubs);
+            var clubsToPreload = new Club[] { new Club { Name = duplicatedClubName } };
+            IEntityGateway entityGateway = await InMemoryEntityGatewayFactory.CreateEntityGatewayAsync(clubsToPreload);
             IAddClubPresenter presenter = new FakeAddClubPresenter(_output);
             IAddClubInteractor interactor = new AddClubInteractor(presenter, entityGateway);
             AddClubInputModel inputModel = new AddClubInputModel { Name = duplicatedClubName };
@@ -143,7 +143,7 @@ namespace Rang.Demo.CleanArchitecture.XUnitTest.ApplicationTests
         public async Task AddClubAsync_CommandResult_Success()
         {
             //arrange
-            IEntityGateway entityGateway = await InMemoryEntityGatewayFactory.CreateEntityGateway();
+            IEntityGateway entityGateway = InMemoryEntityGatewayFactory.CreateEntityGateway();
             IAddClubPresenter presenter = new FakeAddClubPresenter(_output);
             IAddClubInteractor interactor = new AddClubInteractor(presenter, entityGateway);
             AddClubInputModel inputModel = new AddClubInputModel { Name = "C# Knights" };

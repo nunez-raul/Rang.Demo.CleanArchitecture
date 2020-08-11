@@ -4,6 +4,7 @@ using Rang.Demo.CleanArchitecture.Domain.Entity;
 using Rang.Demo.CleanArchitecture.Persistence.Ef;
 using Rang.Demo.CleanArchitecture.Persistence.Ef.Ef.Context;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -11,7 +12,7 @@ namespace Rang.Demo.CleanArchitecture.XUnitTest.TestDoubles
 {
     public static class InMemoryEntityGatewayFactory
     {
-        public static async Task<IEntityGateway> CreateEntityGateway()
+        public static IEntityGateway CreateEntityGateway()
         {
             return new EntityGateway(
                 new ModelRepositoryContext(
@@ -46,6 +47,6 @@ namespace Rang.Demo.CleanArchitecture.XUnitTest.TestDoubles
 
 
             return new EntityGateway(modelRepositoryContext);
-        }
+        }   
     }
 }
