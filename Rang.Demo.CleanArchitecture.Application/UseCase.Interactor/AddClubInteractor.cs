@@ -15,6 +15,8 @@ namespace Rang.Demo.CleanArchitecture.Application.UseCase.Interactor
     {
         // fields
         protected IAddClubPresenter _presenter;
+        protected AddClubInputModel _inputModel;
+        protected Club _clubToAdd;
 
         // constructor
         public AddClubInteractor(IAddClubPresenter presenter, IEntityGateway entityGateway)
@@ -26,70 +28,68 @@ namespace Rang.Demo.CleanArchitecture.Application.UseCase.Interactor
         // methods
         public async Task<CommandResult<AddClubOutputModel>> AddClubAsync(AddClubInputModel inputModel)
         {
-            if (inputModel == null)
-                throw new ArgumentNullException(nameof(inputModel));
+            _inputModel = inputModel ?? throw new ArgumentNullException(nameof(inputModel));
+            _clubToAdd = new Club(inputModel.ToClubModel());
 
-            var club = new Club(inputModel.ToClubModel());
-
-            if (!club.IsValid)
-            {
-                PresentValidationErrors(club);
-                return new CommandResult<AddClubOutputModel>
-                {
-                    Status = CommandResultStatusCode.FailedModelValidation,
-                    ModelValidationErrors = club.ModelValidationErrors,
-                    OutputModel = null
-                };
-            }
-
-            if (await IsClubAlreadyStoredAsync(club))
-            {
-                PresentDuplicatedResult(new AddClubOutputModel(club.GetModel()));
-                return new CommandResult<AddClubOutputModel>
-                {
-                    Status = CommandResultStatusCode.DuplicateEntry,
-                    ModelValidationErrors = null,
-                    OutputModel = null
-                };
-            }
-            else
-            {
-                var storedClub = await SaveToStorageAsync(club);
-                var storedOutputModel = new AddClubOutputModel(storedClub.GetModel());
-                PresentSuccessfulResult(storedOutputModel);
-                return new CommandResult<AddClubOutputModel>
-                {
-                    Status = CommandResultStatusCode.Success,
-                    ModelValidationErrors = null,
-                    OutputModel = storedOutputModel
-                };
-            }
+            if (!_clubToAdd.IsValid)
+                return PresentValidationErrors();
+                
+            if (await IsClubAlreadyStoredAsync())            
+                return PresentDuplicatedResult();
+                
+            _clubToAdd = await SaveToStorageAsync();
+            return PresentSuccessfulResult();
         }
 
-        protected virtual void PresentValidationErrors(Club club)
+        protected virtual CommandResult<AddClubOutputModel> PresentValidationErrors()
         {
-            _presenter.PresentValidationErrors(club.ModelValidationErrors);
+            _presenter.PresentValidationErrors(_clubToAdd.ModelValidationErrors);
+
+            return new CommandResult<AddClubOutputModel>
+            {
+                Status = CommandResultStatusCode.FailedModelValidation,
+                ModelValidationErrors = _clubToAdd.ModelValidationErrors,
+                OutputModel = null
+            };
         }
 
-        protected virtual async Task<bool> IsClubAlreadyStoredAsync(Club club)
+        protected virtual async Task<bool> IsClubAlreadyStoredAsync()
         {
-            var existingClub = await _entityGateway.GetClubByNameAsync(club.Name);
+            var existingClub = await _entityGateway.GetClubByNameAsync(_clubToAdd.Name);
             return existingClub != null;
         }
 
-        protected virtual void PresentDuplicatedResult(AddClubOutputModel outputModel)
+        protected virtual CommandResult<AddClubOutputModel> PresentDuplicatedResult()
         {
+            var outputModel = new AddClubOutputModel(_clubToAdd.GetModel());
+
             _presenter.PresentDuplicatedResult(outputModel);
+
+            return new CommandResult<AddClubOutputModel>
+            {
+                Status = CommandResultStatusCode.DuplicateEntry,
+                ModelValidationErrors = null,
+                OutputModel = null
+            };
         }
 
-        protected virtual async Task<Club> SaveToStorageAsync(Club club)
+        protected virtual async Task<Club> SaveToStorageAsync()
         {
-            return await _entityGateway.AddClubAsync(club);
+            return await _entityGateway.AddClubAsync(_clubToAdd);
         }
 
-        protected virtual void PresentSuccessfulResult(AddClubOutputModel outputModel)
+        protected virtual CommandResult<AddClubOutputModel> PresentSuccessfulResult()
         {
+            var outputModel = new AddClubOutputModel(_clubToAdd.GetModel());
+
             _presenter.PresentSuccessfulResult(outputModel);
+
+            return new CommandResult<AddClubOutputModel>
+            {
+                Status = CommandResultStatusCode.Success,
+                ModelValidationErrors = null,
+                OutputModel = outputModel
+            };
         }
     }
 }
