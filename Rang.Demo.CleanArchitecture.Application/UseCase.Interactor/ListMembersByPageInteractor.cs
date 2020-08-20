@@ -16,6 +16,7 @@ namespace Rang.Demo.CleanArchitecture.Application.UseCase.Interactor
     {
         //fields
         protected IListMembersByPagePresenter _presenter;
+        protected ListMembersByPageInputModel _inputModel;
 
         //Constructors
         public ListMembersByPageInteractor(IListMembersByPagePresenter presenter, IEntityGateway entityGateway)
@@ -27,49 +28,47 @@ namespace Rang.Demo.CleanArchitecture.Application.UseCase.Interactor
         //methods
         public async Task<CommandResult<ListMembersByPageOutputModel>> ListMembersByPageAsync(ListMembersByPageInputModel inputModel)
         {
-            if (inputModel == null)
-                throw new ArgumentNullException(nameof(inputModel));
+            _inputModel = inputModel ?? throw new ArgumentNullException(nameof(inputModel));
+         
+            if (_inputModel.MembersPerPage == 0)
+                return PresentValidationErrors();
+            
+            var page = await _entityGateway.GetMembersByPageAsync(_inputModel.PageNumber, _inputModel.MembersPerPage);
+            return PresentSuccessfulResult(page);
+        }
 
-            if (inputModel.MembersPerPage == 0)
-            {
-                var validationErrors = new Dictionary<ModelValidationStatusCode, List<string>>
+        protected virtual CommandResult<ListMembersByPageOutputModel> PresentValidationErrors()
+        {
+            var validationErrors = new Dictionary<ModelValidationStatusCode, List<string>>
                 {
                     { ModelValidationStatusCode.InvalidDataSupplied, new List<string>(new string[] { "0 members per page is not a valid page size." }) }
                 };
 
-                PresentValidationErrors(validationErrors);
-                return new CommandResult<ListMembersByPageOutputModel>
-                {
-                    Status = CommandResultStatusCode.FailedModelValidation,
-                    ModelValidationErrors = validationErrors,
-                    OutputModel = null
-                };
-            }
+            _presenter.PresentValidationErrors(validationErrors);
 
-            var page = await _entityGateway.GetMembersByPageAsync(inputModel.PageNumber, inputModel.MembersPerPage);
+            return new CommandResult<ListMembersByPageOutputModel>
+            {
+                Status = CommandResultStatusCode.FailedModelValidation,
+                ModelValidationErrors = validationErrors,
+                OutputModel = null
+            };
+        }
 
+        protected virtual CommandResult<ListMembersByPageOutputModel> PresentSuccessfulResult(Page<Domain.Entity.Member> page)
+        {
             var outputModel = new ListMembersByPageOutputModel
             {
                 Page = page
             };
 
-            PresentSuccessfulResult(outputModel);
+            _presenter.PresentSuccessfulResult(outputModel);
+
             return new CommandResult<ListMembersByPageOutputModel>
             {
                 Status = CommandResultStatusCode.Success,
                 ModelValidationErrors = null,
                 OutputModel = outputModel
             };
-        }
-
-        protected virtual void PresentValidationErrors(Dictionary<ModelValidationStatusCode, List<string>> validationErrors)
-        {
-            _presenter.PresentValidationErrors(validationErrors);
-        }
-
-        protected virtual void PresentSuccessfulResult(ListMembersByPageOutputModel outputModel)
-        {
-            _presenter.PresentSuccessfulResult(outputModel);
         }
     }
 }
