@@ -9,14 +9,14 @@ namespace Rang.Demo.CleanArchitecture.Application.Infrastructure.PlugIn
     public interface IEntityGateway
     {
         //write
-        Task<Member> AddMemberAsync(Member member);
+        Task<User> AddUserAsync(User user);
         Task<Club> AddClubAsync(Club club);
 
         //read
-        Task<Member> GetMemberByUsernameAsync(string username);
-        Task<IEnumerable<Member>> GetMembersByListOfIdsAsync(IEnumerable<Guid> ids);
-        Task<IEnumerable<Member>> GetMembersByListOfUsernamesAsync(IEnumerable<string> names);
-        Task<Page<Member>> GetMembersByPageAsync(int pageNumber, int membersPerPage);
+        Task<User> GetUserByUsernameAsync(string username);
+        Task<IEnumerable<User>> GetUsersByListOfIdsAsync(IEnumerable<Guid> ids);
+        Task<IEnumerable<User>> GetUsersByListOfUsernamesAsync(IEnumerable<string> usernames);
+        Task<Page<User>> GetUsersByPageAsync(int pageNumber, int usersPerPage);
 
         Task<Club> GetClubByIdAsync(Guid Id);
         Task<Club> GetClubByNameAsync(string name);

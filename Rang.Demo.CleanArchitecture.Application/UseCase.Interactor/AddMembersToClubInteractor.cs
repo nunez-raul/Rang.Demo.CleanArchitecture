@@ -19,7 +19,7 @@ namespace Rang.Demo.CleanArchitecture.Application.UseCase.Interactor
         protected IAddMembersToClubPresenter _presenter;
         protected AddMembersToClubInputModel _inputModel;
         protected Club _loadedClub;
-        protected IEnumerable<Member> _loadedMembers;
+        protected IEnumerable<User> _loadedMembers;
 
         // constructor
         public AddMembersToClubInteractor(IAddMembersToClubPresenter presenter, IEntityGateway entityGateway)
@@ -129,10 +129,10 @@ namespace Rang.Demo.CleanArchitecture.Application.UseCase.Interactor
                 return false;
 
             var membersRecoveredById = await _entityGateway
-                .GetMembersByListOfIdsAsync(idsOfMembersToAdd);
+                .GetUsersByListOfIdsAsync(idsOfMembersToAdd);
 
             var membersRecoveredByUsername = await _entityGateway
-                .GetMembersByListOfUsernamesAsync(usernamesOfMembersToAddWithNoIdSupplied);
+                .GetUsersByListOfUsernamesAsync(usernamesOfMembersToAddWithNoIdSupplied);
 
             _loadedMembers = membersRecoveredById.Concat(membersRecoveredByUsername);
 
@@ -145,7 +145,7 @@ namespace Rang.Demo.CleanArchitecture.Application.UseCase.Interactor
 
             return new CommandResult<AddMembersToClubOutputModel>
             {
-                Status = CommandResultStatusCode.MembersInListNotFound,
+                Status = CommandResultStatusCode.UsersInListNotFound,
                 ModelValidationErrors = null,
                 OutputModel = null
             };

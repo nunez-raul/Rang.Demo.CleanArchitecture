@@ -3,8 +3,8 @@ using System.Threading.Tasks;
 
 namespace Rang.Demo.CleanArchitecture.Application.UseCase.In.Boundary
 {
-    public interface IAddMemberInteractor
+    public interface IAddUserInteractor
     {
-        Task<CommandResult<AddMemberOutputModel>> AddMemberAsync(AddMemberInputModel inputModel);
+        Task<CommandResult<AddUserOutputModel>> AddUserAsync(AddUserInputModel inputModel);
     }
 }

@@ -21,14 +21,14 @@ namespace Rang.Demo.CleanArchitecture.XUnitTest.TestDoubles
                     .Options));
         }
 
-        public static async Task<IEntityGateway> CreateEntityGatewayAsync(Member[] members)
+        public static async Task<IEntityGateway> CreateEntityGatewayAsync(User[] users)
         {
             var modelRepositoryContext = new ModelRepositoryContext(
                     new DbContextOptionsBuilder<ModelRepositoryContext>()
                     .UseInMemoryDatabase(Guid.NewGuid().ToString())
                     .Options);
 
-            await modelRepositoryContext.MemberModelDbSet.AddRangeAsync(members.Select(m => m.GetModel()).ToArray());
+            await modelRepositoryContext.UserModelDbSet.AddRangeAsync(users.Select(m => m.GetModel()).ToArray());
             await modelRepositoryContext.SaveChangesAsync();
 
 

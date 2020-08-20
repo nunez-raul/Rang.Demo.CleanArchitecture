@@ -9,7 +9,7 @@
         MissingClub,
         MissingMembersToAdd,
         ClubNotFound,
-        MemberNotFound,
-        MembersInListNotFound
+        UserNotFound,
+        UsersInListNotFound
     }
 }

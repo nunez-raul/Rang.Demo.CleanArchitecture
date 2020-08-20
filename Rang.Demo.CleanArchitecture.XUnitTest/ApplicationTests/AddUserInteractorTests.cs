@@ -13,13 +13,13 @@ using Xunit.Abstractions;
 
 namespace Rang.Demo.CleanArchitecture.XUnitTest.ApplicationTests
 {
-    public class AddMemberInteractorTests
+    public class AddUserInteractorTests
     {
         //fields
         private readonly ITestOutputHelper _output;
 
         //constructors
-        public AddMemberInteractorTests(ITestOutputHelper output)
+        public AddUserInteractorTests(ITestOutputHelper output)
         {
             _output = output;
         }
@@ -30,10 +30,10 @@ namespace Rang.Demo.CleanArchitecture.XUnitTest.ApplicationTests
         {
             //arrange
             IEntityGateway entityGateway = null;
-            IAddMemberPresenter presenter = new FakeAddMemberPresenter(_output);
+            IAddUserPresenter presenter = new FakeAddUserPresenter(_output);
 
             //act
-            Action action = () => new AddMemberInteractor(presenter, entityGateway);
+            Action action = () => new AddUserInteractor(presenter, entityGateway);
 
             //assert
             Assert.Throws<ArgumentNullException>(action);
@@ -44,10 +44,10 @@ namespace Rang.Demo.CleanArchitecture.XUnitTest.ApplicationTests
         {
             //arrange
             IEntityGateway entityGateway = InMemoryEntityGatewayFactory.CreateEntityGateway();
-            IAddMemberPresenter presenter = null;
+            IAddUserPresenter presenter = null;
 
             //act
-            Action action = () => new AddMemberInteractor(presenter, entityGateway);
+            Action action = () => new AddUserInteractor(presenter, entityGateway);
 
             //assert
             Assert.Throws<ArgumentNullException>(action);
@@ -58,42 +58,42 @@ namespace Rang.Demo.CleanArchitecture.XUnitTest.ApplicationTests
         {
             //arrange
             IEntityGateway entityGateway = InMemoryEntityGatewayFactory.CreateEntityGateway();
-            IAddMemberPresenter presenter = new FakeAddMemberPresenter(_output);
+            IAddUserPresenter presenter = new FakeAddUserPresenter(_output);
 
             //act
-            var interactor = new AddMemberInteractor(presenter, entityGateway);
+            var interactor = new AddUserInteractor(presenter, entityGateway);
 
             //assert
             Assert.NotNull(interactor);
         }
 
         [Fact]
-        public async Task AddMemberAsync_ThrowsException_NullInput()
+        public async Task AddUserAsync_ThrowsException_NullInput()
         {
             //arrange
             IEntityGateway entityGateway = InMemoryEntityGatewayFactory.CreateEntityGateway();
-            IAddMemberPresenter presenter = new FakeAddMemberPresenter(_output);
-            IAddMemberInteractor interactor = new AddMemberInteractor(presenter, entityGateway);
-            AddMemberInputModel inputModel = null;
+            IAddUserPresenter presenter = new FakeAddUserPresenter(_output);
+            IAddUserInteractor interactor = new AddUserInteractor(presenter, entityGateway);
+            AddUserInputModel inputModel = null;
 
             //act
-            async Task<CommandResult<Application.UseCase.Out.AddMemberOutputModel>> function() => await interactor.AddMemberAsync(inputModel);
+            async Task<CommandResult<Application.UseCase.Out.AddUserOutputModel>> function() => await interactor.AddUserAsync(inputModel);
 
             //assert
             await Assert.ThrowsAsync<ArgumentNullException>(function);
         }
 
         [Fact]
-        public async Task AddMemberAsync_FailedModelValidation_NullUsername()
+        public async Task AddUserAsync_FailedModelValidation_NullUsername()
         {
             //arrange
             IEntityGateway entityGateway = InMemoryEntityGatewayFactory.CreateEntityGateway();
-            IAddMemberPresenter presenter = new FakeAddMemberPresenter(_output);
-            IAddMemberInteractor interactor = new AddMemberInteractor(presenter, entityGateway);
-            AddMemberInputModel inputModel = new AddMemberInputModel();
+            IAddUserPresenter presenter = new FakeAddUserPresenter(_output);
+            IAddUserInteractor interactor = new AddUserInteractor(presenter, entityGateway);
+            AddUserInputModel inputModel = new AddUserInputModel();
 
             //act
-            var result = await interactor.AddMemberAsync(inputModel);
+            var result = await interactor.AddUserAsync(inputModel);
 
             //assert
             Assert.NotNull(result);
@@ -102,18 +102,18 @@ namespace Rang.Demo.CleanArchitecture.XUnitTest.ApplicationTests
         }
 
         [Fact]
-        public async Task AddMemberAsyncExistingMemberUsernameSameCase_CommandResult_DuplicateEntry()
+        public async Task AddUserAsyncExistingUserUsernameSameCase_CommandResult_DuplicateEntry()
         {
             //arrange
-            string duplicatedMemberUsername = "blacksheep";
-            var members = new Member[] { new Member { Username = duplicatedMemberUsername } };
-            IEntityGateway entityGateway = await InMemoryEntityGatewayFactory.CreateEntityGatewayAsync(members);
-            IAddMemberPresenter presenter = new FakeAddMemberPresenter(_output);
-            IAddMemberInteractor interactor = new AddMemberInteractor(presenter, entityGateway);
-            AddMemberInputModel inputModel = new AddMemberInputModel { Username = duplicatedMemberUsername };
+            string duplicatedUsername = "blacksheep";
+            var users = new User[] { new User { Username = duplicatedUsername } };
+            IEntityGateway entityGateway = await InMemoryEntityGatewayFactory.CreateEntityGatewayAsync(users);
+            IAddUserPresenter presenter = new FakeAddUserPresenter(_output);
+            IAddUserInteractor interactor = new AddUserInteractor(presenter, entityGateway);
+            AddUserInputModel inputModel = new AddUserInputModel { Username = duplicatedUsername };
 
             //act
-            var result = await interactor.AddMemberAsync(inputModel);
+            var result = await interactor.AddUserAsync(inputModel);
 
             //assert
             Assert.NotNull(result);
@@ -121,18 +121,18 @@ namespace Rang.Demo.CleanArchitecture.XUnitTest.ApplicationTests
         }
 
         [Fact]
-        public async Task AddMemberAsyncExistingMemberUsernameDifferentCase_CommandResult_DuplicateEntry()
+        public async Task AddUserAsyncExistingUserUsernameDifferentCase_CommandResult_DuplicateEntry()
         {
             //arrange
-            string duplicatedMemberUsername = "blacksheep";
-            var members = new Member[] { new Member { Username = duplicatedMemberUsername } };
-            IEntityGateway entityGateway = await InMemoryEntityGatewayFactory.CreateEntityGatewayAsync(members);
-            IAddMemberPresenter presenter = new FakeAddMemberPresenter(_output);
-            IAddMemberInteractor interactor = new AddMemberInteractor(presenter, entityGateway);
-            AddMemberInputModel inputModel = new AddMemberInputModel { Username = duplicatedMemberUsername.ToUpperInvariant() };
+            string duplicatedUsername = "blacksheep";
+            var users = new User[] { new User { Username = duplicatedUsername } };
+            IEntityGateway entityGateway = await InMemoryEntityGatewayFactory.CreateEntityGatewayAsync(users);
+            IAddUserPresenter presenter = new FakeAddUserPresenter(_output);
+            IAddUserInteractor interactor = new AddUserInteractor(presenter, entityGateway);
+            AddUserInputModel inputModel = new AddUserInputModel { Username = duplicatedUsername.ToUpperInvariant() };
 
             //act
-            var result = await interactor.AddMemberAsync(inputModel);
+            var result = await interactor.AddUserAsync(inputModel);
 
             //assert
             Assert.NotNull(result);
@@ -140,16 +140,16 @@ namespace Rang.Demo.CleanArchitecture.XUnitTest.ApplicationTests
         }
 
         [Fact]
-        public async Task AddMemberAsync_CommandResult_Success()
+        public async Task AddUserAsync_CommandResult_Success()
         {
             //arrange
             IEntityGateway entityGateway = InMemoryEntityGatewayFactory.CreateEntityGateway();
-            IAddMemberPresenter presenter = new FakeAddMemberPresenter(_output);
-            IAddMemberInteractor interactor = new AddMemberInteractor(presenter, entityGateway);
-            AddMemberInputModel inputModel = new AddMemberInputModel { Username = "blacksheep" };
+            IAddUserPresenter presenter = new FakeAddUserPresenter(_output);
+            IAddUserInteractor interactor = new AddUserInteractor(presenter, entityGateway);
+            AddUserInputModel inputModel = new AddUserInputModel { Username = "blacksheep" };
 
             //act
-            var result = await interactor.AddMemberAsync(inputModel);
+            var result = await interactor.AddUserAsync(inputModel);
 
             //assert
             Assert.NotNull(result);

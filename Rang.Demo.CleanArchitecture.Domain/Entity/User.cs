@@ -5,7 +5,7 @@ using System.Linq;
 
 namespace Rang.Demo.CleanArchitecture.Domain.Entity
 {
-    public class Member : BaseEntity<MemberModel>
+    public class User : BaseEntity<UserModel>
     {
         //fields
         public const int USERNAME_MAX_LENGTH = 100;
@@ -15,14 +15,14 @@ namespace Rang.Demo.CleanArchitecture.Domain.Entity
         public string Username { get => _model.Username; set => _model.Username = value; }
 
         //constructors
-        public Member()
-            : base(new MemberModel()) { }
+        public User()
+            : base(new UserModel()) { }
 
-        public Member(MemberModel model)
+        public User(UserModel model)
             : base(model) { }
 
         //methods
-        public override MemberModel GetModel()
+        public override UserModel GetModel()
         {
             return _model;
         }

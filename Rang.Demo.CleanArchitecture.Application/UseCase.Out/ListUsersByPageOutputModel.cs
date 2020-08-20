@@ -3,9 +3,9 @@ using Rang.Demo.CleanArchitecture.Domain.Entity;
 
 namespace Rang.Demo.CleanArchitecture.Application.UseCase.Out
 {
-    public class ListMembersByPageOutputModel
+    public class ListUsersByPageOutputModel
     {
         //properties
-        public Page<Member> Page { get; set; }
+        public Page<User> Page { get; set; }
     }
 }

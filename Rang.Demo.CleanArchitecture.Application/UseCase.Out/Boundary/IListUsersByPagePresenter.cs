@@ -3,10 +3,9 @@ using System.Collections.Generic;
 
 namespace Rang.Demo.CleanArchitecture.Application.UseCase.Out.Boundary
 {
-    public interface IAddMemberPresenter
+    public interface IListUserByPagePresenter
     {
         void PresentValidationErrors(IDictionary<ModelValidationStatusCode, List<string>> modelValidationErrors);
-        void PresentDuplicatedResult(AddMemberOutputModel outputModel);
-        void PresentSuccessfulResult(AddMemberOutputModel outputModel);
+        void PresentSuccessfulResult(ListUsersByPageOutputModel inputModel);
     }
 }

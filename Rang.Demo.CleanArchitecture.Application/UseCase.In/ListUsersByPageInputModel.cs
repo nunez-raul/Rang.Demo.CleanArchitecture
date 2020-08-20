@@ -1,8 +1,8 @@
 ﻿namespace Rang.Demo.CleanArchitecture.Application.UseCase.In
 {
-    public class ListMembersByPageInputModel
+    public class ListUsersByPageInputModel
     {
         public int PageNumber { get; set; }
-        public int MembersPerPage { get; set; }
+        public int UsersPerPage { get; set; }
     }
 }

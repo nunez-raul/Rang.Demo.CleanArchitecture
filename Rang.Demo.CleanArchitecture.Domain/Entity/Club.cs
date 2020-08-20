@@ -15,7 +15,7 @@ namespace Rang.Demo.CleanArchitecture.Domain.Entity
         //properties
         public Guid Id { get => _model.Id; }
         public string Name { get => _model.Name; set => _model.Name = value; }
-        public ICollection<Member> Members { get; private set; }
+        public ICollection<ClubMember> ClubMembers { get; private set; }
 
         //constructors
         public Club()
@@ -33,15 +33,15 @@ namespace Rang.Demo.CleanArchitecture.Domain.Entity
         protected override void InitializeMe()
         {
             //used for initializing member collections
-            if (_model.Members.Count > 0)
+            if (_model.ClubMembers.Count > 0)
             {
                 //prevent duplicates
-                var dictionary = _model.Members.Select(memberModel => new Member(memberModel)).ToDictionary(m => m.Id);
-                Members = dictionary.Values.ToList();
+                var dictionary = _model.ClubMembers.Select(clubMemberModel => new ClubMember(clubMemberModel)).ToDictionary(m => m.UserId);
+                ClubMembers = dictionary.Values.ToList();
             }
             else
             {
-                Members = new List<Member>();
+                ClubMembers = new List<ClubMember>();
             }
         }
 
@@ -62,20 +62,20 @@ namespace Rang.Demo.CleanArchitecture.Domain.Entity
                 }
             }
 
-            //Members
-            ValidateMemberList();
+            //Club Members
+            ValidateClubMemberList();
 
             return !ModelValidationErrors.Any();
         }
 
-        protected virtual void ValidateMemberList()
+        protected virtual void ValidateClubMemberList()
         {
             StringBuilder sb = new StringBuilder();
-            foreach (Member m in Members)
+            foreach (ClubMember cm in ClubMembers)
             {
-                if (!m.IsValid)
+                if (!cm.IsValid)
                 {
-                    foreach (var validationError in m.ModelValidationErrors)
+                    foreach (var validationError in cm.ModelValidationErrors)
                     {
                         sb.AppendLine(string.Format("{0}: {1}", validationError.Key, string.Join(",", validationError.Value)));
                     }

@@ -3,8 +3,8 @@ using System.Threading.Tasks;
 
 namespace Rang.Demo.CleanArchitecture.Application.UseCase.In.Boundary
 {
-    public interface IListMembersByPageInteractor
+    public interface IListUsersByPageInteractor
     {
-        Task<CommandResult<ListMembersByPageOutputModel>> ListMembersByPageAsync(ListMembersByPageInputModel inputModel);
+        Task<CommandResult<ListUsersByPageOutputModel>> ListUsersByPageAsync(ListUsersByPageInputModel inputModel);
     }
 }

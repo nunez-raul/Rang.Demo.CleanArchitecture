@@ -8,7 +8,7 @@ namespace Rang.Demo.CleanArchitecture.Persistence.Ef.Ef.Context
     public class ModelRepositoryContext : DbContext
     {
         //DbSets
-        public virtual DbSet<MemberModel> MemberModelDbSet { get; set; }
+        public virtual DbSet<UserModel> UserModelDbSet { get; set; }
         public virtual DbSet<ClubModel> ClubModelDbSet { get; set; }
 
         //constructors
@@ -23,7 +23,7 @@ namespace Rang.Demo.CleanArchitecture.Persistence.Ef.Ef.Context
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.ApplyConfiguration(new MemberModelConfiguration());
+            modelBuilder.ApplyConfiguration(new UserModelConfiguration());
             modelBuilder.ApplyConfiguration(new ClubModelConfiguration());
         }
     }

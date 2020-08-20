@@ -2,22 +2,22 @@
 
 namespace Rang.Demo.CleanArchitecture.Application.UseCase.In
 {
-    public class AddMemberInputModel
+    public class AddUserInputModel
     {
         //fields
-        protected MemberModel _model;
+        protected UserModel _model;
 
         //properties
         public string Username { get => _model.Username; set => _model.Username = value; }
 
         //constructors
-        public AddMemberInputModel()
+        public AddUserInputModel()
         {
-            _model = new MemberModel();
+            _model = new UserModel();
         }
 
         //methods
-        public MemberModel ToMemberModel()
+        public UserModel ToUserModel()
         {
             return _model;
         }

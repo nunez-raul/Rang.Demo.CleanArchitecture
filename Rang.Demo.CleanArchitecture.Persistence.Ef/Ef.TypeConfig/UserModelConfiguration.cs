@@ -5,15 +5,15 @@ using Rang.Demo.CleanArchitecture.Domain.Model;
 
 namespace Rang.Demo.CleanArchitecture.Persistence.Ef.Ef.TypeConfig
 {
-    internal class MemberModelConfiguration : IEntityTypeConfiguration<MemberModel>
+    internal class UserModelConfiguration : IEntityTypeConfiguration<UserModel>
     {
-        public void Configure(EntityTypeBuilder<MemberModel> builder)
+        public void Configure(EntityTypeBuilder<UserModel> builder)
         {
-            builder.ToTable("Members").HasKey(e => e.Id);
+            builder.ToTable("Users").HasKey(e => e.Id);
 
             builder.Property(e => e.Id).IsRequired();
             builder.Property(e => e.Username)
-                .HasMaxLength(Member.USERNAME_MAX_LENGTH)
+                .HasMaxLength(User.USERNAME_MAX_LENGTH)
                 .IsRequired(false);
         }
     }

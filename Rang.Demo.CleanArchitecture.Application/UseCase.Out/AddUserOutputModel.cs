@@ -3,16 +3,16 @@ using System;
 
 namespace Rang.Demo.CleanArchitecture.Application.UseCase.Out
 {
-    public class AddMemberOutputModel
+    public class AddUserOutputModel
     {
         //fields
-        protected MemberModel _model;
+        protected UserModel _model;
 
         //properties
         public Guid Id { get => _model.Id; }
         public string Username { get => _model.Username; }
 
-        public AddMemberOutputModel(MemberModel model)
+        public AddUserOutputModel(UserModel model)
         {
             _model = model;
         }
