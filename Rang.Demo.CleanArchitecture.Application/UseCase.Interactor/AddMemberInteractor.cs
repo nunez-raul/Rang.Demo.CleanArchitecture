@@ -15,6 +15,8 @@ namespace Rang.Demo.CleanArchitecture.Application.UseCase.Interactor
     {
         //fields
         protected IAddMemberPresenter _presenter;
+        protected AddMemberInputModel _inputModel;
+        protected Member _memberToAdd;
 
         //Constructors
         public AddMemberInteractor(IAddMemberPresenter presenter, IEntityGateway entityGateway)
@@ -26,65 +28,66 @@ namespace Rang.Demo.CleanArchitecture.Application.UseCase.Interactor
         //methods
         public async Task<CommandResult<AddMemberOutputModel>> AddMemberAsync(AddMemberInputModel inputModel)
         {
-            if (inputModel == null)
-                throw new ArgumentNullException(nameof(inputModel));
+            _inputModel = inputModel ?? throw new ArgumentNullException(nameof(inputModel));
+            _memberToAdd = new Member(inputModel.ToMemberModel());
 
-            var member = new Member(inputModel.ToMemberModel());
+            if (!_memberToAdd.IsValid)
+                return PresentValidationErrors();
+   
+            if (await IsMemberAlreadyStoredAsync(_memberToAdd))
+                return PresentDuplicatedResult(new AddMemberOutputModel(_memberToAdd.GetModel()));
 
-            if (!member.IsValid)
-            {
-                PresentValidationErrors(member);
-                return new CommandResult<AddMemberOutputModel>
-                {
-                    Status = CommandResultStatusCode.FailedModelValidation,
-                    ModelValidationErrors = member.ModelValidationErrors,
-                    OutputModel = null
-                };
-            }
-
-            if (await IsMemberAlreadyStoredAsync(member))
-            {
-                PresentDuplicatedResult(new AddMemberOutputModel(member.GetModel()));
-                return new CommandResult<AddMemberOutputModel>
-                {
-                    Status = CommandResultStatusCode.DuplicateEntry,
-                    ModelValidationErrors = null,
-                    OutputModel = null
-                };
-            }
-            else
-            {
-                var storedMember = await SaveToStorageAsync(member);
-                var storedOutputModel = new AddMemberOutputModel(storedMember.GetModel());
-                PresentSuccessfulResult(storedOutputModel);
-                return new CommandResult<AddMemberOutputModel>
-                {
-                    Status = CommandResultStatusCode.Success,
-                    ModelValidationErrors = null,
-                    OutputModel = storedOutputModel
-                };
-            }
+            _memberToAdd = await SaveToStorageAsync();
+            return PresentSuccessfulResult();
         }
-        protected virtual void PresentValidationErrors(Member member)
+
+        protected virtual CommandResult<AddMemberOutputModel> PresentValidationErrors()
         {
-            _presenter.PresentValidationErrors(member.ModelValidationErrors);
+            _presenter.PresentValidationErrors(_memberToAdd.ModelValidationErrors);
+
+            return new CommandResult<AddMemberOutputModel>
+            {
+                Status = CommandResultStatusCode.FailedModelValidation,
+                ModelValidationErrors = _memberToAdd.ModelValidationErrors,
+                OutputModel = null
+            };
         }
+
         protected virtual async Task<bool> IsMemberAlreadyStoredAsync(Member member)
         {
             var existingMember = await _entityGateway.GetMemberByUsernameAsync(member.Username);
             return existingMember != null;
         }
-        protected virtual void PresentDuplicatedResult(AddMemberOutputModel outputModel)
+
+        protected virtual CommandResult<AddMemberOutputModel> PresentDuplicatedResult(AddMemberOutputModel outputModel)
         {
             _presenter.PresentDuplicatedResult(outputModel);
+
+            return new CommandResult<AddMemberOutputModel>
+            {
+                Status = CommandResultStatusCode.DuplicateEntry,
+                ModelValidationErrors = null,
+                OutputModel = null
+            };
         }
-        protected virtual async Task<Member> SaveToStorageAsync(Member member)
+
+        protected virtual async Task<Member> SaveToStorageAsync()
         {
-            return await _entityGateway.AddMemberAsync(member);
+            return await _entityGateway.AddMemberAsync(_memberToAdd);
         }
-        protected virtual void PresentSuccessfulResult(AddMemberOutputModel outputModel)
+
+        protected virtual CommandResult<AddMemberOutputModel> PresentSuccessfulResult()
         {
+            var outputModel = new AddMemberOutputModel(_memberToAdd.GetModel());
+
             _presenter.PresentSuccessfulResult(outputModel);
+
+            return new CommandResult<AddMemberOutputModel>
+            {
+                Status = CommandResultStatusCode.Success,
+                ModelValidationErrors = null,
+                OutputModel = outputModel
+            };
         }
     }
 }

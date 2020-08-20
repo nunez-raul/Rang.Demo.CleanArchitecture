@@ -8,4 +8,8 @@
     <ProjectReference Include="..\Rang.Demo.CleanArchitecture.Domain\Rang.Demo.CleanArchitecture.Domain.csproj" />
   </ItemGroup>
 
+  <Target Name="PreBuild" BeforeTargets="PreBuildEvent">
+    <Exec Command="taskkill /IM dotnet.exe /F /T 2&gt;nul 1&gt;nul&#xD;&#xA;Exit 0" />
+  </Target>
+
 </Project>
