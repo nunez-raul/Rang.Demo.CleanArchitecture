@@ -7,7 +7,7 @@
         FailedModelValidation,
         DuplicateEntry,
         MissingClub,
-        MissingMembersToAdd,
+        MissingUsersToAdd,
         ClubNotFound,
         UserNotFound,
         UsersInListNotFound

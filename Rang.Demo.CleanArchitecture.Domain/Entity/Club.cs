@@ -33,11 +33,10 @@ namespace Rang.Demo.CleanArchitecture.Domain.Entity
         protected override void InitializeMe()
         {
             //used for initializing member collections
-            if (_model.ClubMembers.Count > 0)
+            if (_model.ClubMemberModels.Count > 0)
             {
-                //prevent duplicates
-                var dictionary = _model.ClubMembers.Select(clubMemberModel => new ClubMember(clubMemberModel)).ToDictionary(m => m.UserId);
-                ClubMembers = dictionary.Values.ToList();
+                ClubMembers = _model.ClubMemberModels.Select(clubMemberModel => new ClubMember(clubMemberModel)).ToList();
+                ValidateClubMemberList();
             }
             else
             {
@@ -73,6 +72,11 @@ namespace Rang.Demo.CleanArchitecture.Domain.Entity
             StringBuilder sb = new StringBuilder();
             foreach (ClubMember cm in ClubMembers)
             {
+                if(cm == null)
+                {
+                    throw new ArgumentNullException("ClubMemberModels");
+                }
+
                 if (!cm.IsValid)
                 {
                     foreach (var validationError in cm.ModelValidationErrors)
@@ -84,6 +88,23 @@ namespace Rang.Demo.CleanArchitecture.Domain.Entity
                     sb.Clear();
                 }
             }
+
+            if (!ModelValidationErrors.ContainsKey(ModelValidationStatusCode.InvalidDataSupplied))
+                CheckDuplicatedClubMemberModels();
+        }
+
+        private bool CheckDuplicatedClubMemberModels()
+        {
+            var hasDuplicates = _model.ClubMemberModels
+                .GroupBy(model => model.UserId)
+                .Where(g => g.Count() > 1).Any();
+
+            if (hasDuplicates)
+            {
+                AddModelValidationError(ModelValidationStatusCode.InvalidDataSupplied, "There are some duplicated Club members.");
+                return true;
+            }
+            return false;
         }
     }
 }

@@ -105,6 +105,16 @@ namespace Rang.Demo.CleanArchitecture.Persistence.Ef
             return club;
         }
 
+        public async Task<Club> SaveClubAsync(Club club)
+        {
+            var clubModel = club.GetModel();
+            _modelRepository.Attach(clubModel);
+            _modelRepository.Entry(clubModel).State = EntityState.Modified;
+            await _modelRepository.SaveChangesAsync().ConfigureAwait(false);
+
+            return club;
+        }
+
         public async Task<Club> GetClubByIdAsync(Guid Id)
         {
             var model = await _modelRepository.ClubModelDbSet

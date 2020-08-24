@@ -32,7 +32,7 @@ namespace Rang.Demo.CleanArchitecture.XUnitTest.DomainTests
             var clubMemberModels = new ClubMemberModel[] {
                 new ClubMemberModel { UserId = johnDoe.Id },
                 new ClubMemberModel { UserId = williamDoe.Id } };
-            var model = new ClubModel { Name = "C# Coding Club", ClubMembers = clubMemberModels };
+            var model = new ClubModel { Name = "C# Coding Club", ClubMemberModels = clubMemberModels };
 
             // act
             var entity = new Club(model);
@@ -66,13 +66,16 @@ namespace Rang.Demo.CleanArchitecture.XUnitTest.DomainTests
             var clubMemberModels = new ClubMemberModel[] {
                 clubMemberModel,
                 clubMemberModel }; //<-- Added twice the same clubMemberModel to the array of models
-            var model = new ClubModel { Name = "C# Coding Club", ClubMembers = clubMemberModels };
+            var model = new ClubModel { Name = "C# Coding Club", ClubMemberModels = clubMemberModels };
 
             // act
-            Action action = () => new Club(model);
+            var entity = new Club(model);
 
             // assert
-            Assert.Throws<ArgumentException>(action);
+            Assert.NotNull(entity);
+            Assert.False(entity.IsValid);
+            Assert.True(entity.ModelValidationErrors.ContainsKey(ModelValidationStatusCode.InvalidDataSupplied));
+            Assert.True(entity.Id != null && entity.Id != Guid.Empty);
         }
 
         [Fact]
@@ -83,13 +86,16 @@ namespace Rang.Demo.CleanArchitecture.XUnitTest.DomainTests
             var clubMemberModels = new ClubMemberModel[] {
                 new ClubMemberModel { UserId = johnDoe.Id },
                 new ClubMemberModel { UserId = johnDoe.Id } }; //<-- added the same memberId within 2 different ClubMemberModel to the array of models
-            var model = new ClubModel { Name = "C# Coding Club", ClubMembers = clubMemberModels };
+            var model = new ClubModel { Name = "C# Coding Club", ClubMemberModels = clubMemberModels };
 
             // act
-            Action action = () => new Club(model);
+            var entity = new Club(model);
 
             // assert
-            Assert.Throws<ArgumentException>(action);
+            Assert.NotNull(entity);
+            Assert.False(entity.IsValid);
+            Assert.True(entity.ModelValidationErrors.ContainsKey(ModelValidationStatusCode.InvalidDataSupplied));
+            Assert.True(entity.Id != null && entity.Id != Guid.Empty);
         }
 
         [Fact]
@@ -160,7 +166,7 @@ namespace Rang.Demo.CleanArchitecture.XUnitTest.DomainTests
             var clubMemberModels = new ClubMemberModel[] {
                 new ClubMemberModel { UserId = johnDoe.Id },
                 new ClubMemberModel { UserId = Guid.Empty } };
-            var model = new ClubModel { Name = "C# Coding Club", ClubMembers = clubMemberModels };
+            var model = new ClubModel { Name = "C# Coding Club", ClubMemberModels = clubMemberModels };
 
             // act
             var entity = new Club(model);
@@ -179,7 +185,7 @@ namespace Rang.Demo.CleanArchitecture.XUnitTest.DomainTests
             var clubMemberModels = new ClubMemberModel[] {
                 new ClubMemberModel { UserId = johnDoe.Id },
                 null };
-            var model = new ClubModel { Name = "C# Coding Club", ClubMembers = clubMemberModels };
+            var model = new ClubModel { Name = "C# Coding Club", ClubMemberModels = clubMemberModels };
 
             // act
             Action action = () => new Club(model);

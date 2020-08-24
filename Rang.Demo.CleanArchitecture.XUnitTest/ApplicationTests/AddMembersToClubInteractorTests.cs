@@ -128,7 +128,7 @@ namespace Rang.Demo.CleanArchitecture.XUnitTest.ApplicationTests
             IEntityGateway entityGateway = await InMemoryEntityGatewayFactory.CreateEntityGatewayAsync(members);
             IAddMembersToClubPresenter presenter = new FakeAddMembersToClubPresenter(_output);
             IAddMembersToClubInteractor interactor = new AddMembersToClubInteractor(presenter, entityGateway);
-            AddMembersToClubInputModel inputModel = new AddMembersToClubInputModel { ClubModel = new Domain.Model.ClubModel { Id = nonExistingClubId }, MemberModelsToAdd = members.Select(member => member.GetModel()).ToList() };
+            AddMembersToClubInputModel inputModel = new AddMembersToClubInputModel { ClubModel = new Domain.Model.ClubModel { Id = nonExistingClubId }, UserModelsToAdd = members.Select(member => member.GetModel()).ToList() };
 
             //act
             var result = await interactor.AddMembersToClubAsync(inputModel);
@@ -148,7 +148,7 @@ namespace Rang.Demo.CleanArchitecture.XUnitTest.ApplicationTests
             IEntityGateway entityGateway = await InMemoryEntityGatewayFactory.CreateEntityGatewayAsync(members);
             IAddMembersToClubPresenter presenter = new FakeAddMembersToClubPresenter(_output);
             IAddMembersToClubInteractor interactor = new AddMembersToClubInteractor(presenter, entityGateway);
-            AddMembersToClubInputModel inputModel = new AddMembersToClubInputModel { ClubModel = new Domain.Model.ClubModel { Name = nonExistingClubName }, MemberModelsToAdd = members.Select(member => member.GetModel()).ToList() };
+            AddMembersToClubInputModel inputModel = new AddMembersToClubInputModel { ClubModel = new Domain.Model.ClubModel { Name = nonExistingClubName }, UserModelsToAdd = members.Select(member => member.GetModel()).ToList() };
 
             //act
             var result = await interactor.AddMembersToClubAsync(inputModel);
@@ -159,7 +159,7 @@ namespace Rang.Demo.CleanArchitecture.XUnitTest.ApplicationTests
         }
 
         [Fact]
-        public async Task AddMembersToClubAsync_CommandResult_MissingMembersToAddFromInput1()
+        public async Task AddMembersToClubAsync_CommandResult_MissingUsersToAddFromInput1()
         {
             //arrange
             string existingClubName = "C# Knights";
@@ -174,11 +174,11 @@ namespace Rang.Demo.CleanArchitecture.XUnitTest.ApplicationTests
 
             //assert
             Assert.NotNull(result);
-            Assert.True(result.Status == Application.Common.CommandResultStatusCode.MissingMembersToAdd);
+            Assert.True(result.Status == Application.Common.CommandResultStatusCode.MissingUsersToAdd);
         }
 
         [Fact]
-        public async Task AddMembersToClubAsync_CommandResult_MissingMembersToAddFromInput2()
+        public async Task AddMembersToClubAsync_CommandResult_MissingUsersToAddFromInput2()
         {
             //arrange
             string existingClubName = "C# Knights";
@@ -186,18 +186,18 @@ namespace Rang.Demo.CleanArchitecture.XUnitTest.ApplicationTests
             IEntityGateway entityGateway = await InMemoryEntityGatewayFactory.CreateEntityGatewayAsync(clubsToPreload);
             IAddMembersToClubPresenter presenter = new FakeAddMembersToClubPresenter(_output);
             IAddMembersToClubInteractor interactor = new AddMembersToClubInteractor(presenter, entityGateway);
-            AddMembersToClubInputModel inputModel = new AddMembersToClubInputModel { ClubModel = new Domain.Model.ClubModel { Name = existingClubName }, MemberModelsToAdd = null };
+            AddMembersToClubInputModel inputModel = new AddMembersToClubInputModel { ClubModel = new Domain.Model.ClubModel { Name = existingClubName }, UserModelsToAdd = null };
 
             //act
             var result = await interactor.AddMembersToClubAsync(inputModel);
 
             //assert
             Assert.NotNull(result);
-            Assert.True(result.Status == Application.Common.CommandResultStatusCode.MissingMembersToAdd);
+            Assert.True(result.Status == Application.Common.CommandResultStatusCode.MissingUsersToAdd);
         }
 
         [Fact]
-        public async Task AddMembersToClubAsync_CommandResult_MembersToAddNotFoundById()
+        public async Task AddMembersToClubAsync_CommandResult_UsersToAddNotFoundById()
         {
             //arrange
             string existingClubName = "C# Knights";
@@ -206,7 +206,7 @@ namespace Rang.Demo.CleanArchitecture.XUnitTest.ApplicationTests
             IEntityGateway entityGateway = await InMemoryEntityGatewayFactory.CreateEntityGatewayAsync(clubsToPreload);
             IAddMembersToClubPresenter presenter = new FakeAddMembersToClubPresenter(_output);
             IAddMembersToClubInteractor interactor = new AddMembersToClubInteractor(presenter, entityGateway);
-            AddMembersToClubInputModel inputModel = new AddMembersToClubInputModel { ClubModel = new Domain.Model.ClubModel { Name = existingClubName }, MemberModelsToAdd = members.Select(member => member.GetModel()).ToList() };
+            AddMembersToClubInputModel inputModel = new AddMembersToClubInputModel { ClubModel = new Domain.Model.ClubModel { Name = existingClubName }, UserModelsToAdd = members.Select(member => member.GetModel()).ToList() };
 
             //act
             var result = await interactor.AddMembersToClubAsync(inputModel);
@@ -217,7 +217,7 @@ namespace Rang.Demo.CleanArchitecture.XUnitTest.ApplicationTests
         }
 
         [Fact]
-        public async Task AddMembersToClubAsync_CommandResult_MembersToAddNotFoundByUsername()
+        public async Task AddMembersToClubAsync_CommandResult_UsersToAddNotFoundByUsername()
         {
             //arrange
             string existingClubName = "C# Knights";
@@ -226,7 +226,7 @@ namespace Rang.Demo.CleanArchitecture.XUnitTest.ApplicationTests
             IEntityGateway entityGateway = await InMemoryEntityGatewayFactory.CreateEntityGatewayAsync(clubsToPreload);
             IAddMembersToClubPresenter presenter = new FakeAddMembersToClubPresenter(_output);
             IAddMembersToClubInteractor interactor = new AddMembersToClubInteractor(presenter, entityGateway);
-            AddMembersToClubInputModel inputModel = new AddMembersToClubInputModel { ClubModel = new Domain.Model.ClubModel { Name = existingClubName }, MemberModelsToAdd = members.Select(member => member.GetModel()).ToList() };
+            AddMembersToClubInputModel inputModel = new AddMembersToClubInputModel { ClubModel = new Domain.Model.ClubModel { Name = existingClubName }, UserModelsToAdd = members.Select(member => member.GetModel()).ToList() };
 
             //act
             var result = await interactor.AddMembersToClubAsync(inputModel);

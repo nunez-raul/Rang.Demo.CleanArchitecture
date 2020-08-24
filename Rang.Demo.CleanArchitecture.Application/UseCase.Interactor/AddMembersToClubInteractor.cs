@@ -19,7 +19,7 @@ namespace Rang.Demo.CleanArchitecture.Application.UseCase.Interactor
         protected IAddMembersToClubPresenter _presenter;
         protected AddMembersToClubInputModel _inputModel;
         protected Club _loadedClub;
-        protected IEnumerable<User> _loadedMembers;
+        protected IEnumerable<User> _loadedUsers;
 
         // constructor
         public AddMembersToClubInteractor(IAddMembersToClubPresenter presenter, IEntityGateway entityGateway)
@@ -38,17 +38,26 @@ namespace Rang.Demo.CleanArchitecture.Application.UseCase.Interactor
                 return PresentRequiredClubMissingResult();
             
             
-            if (AreAllMembersToAddMissingFromInput())
-                return PresentRequiredMembersToAddMissingResult();
+            if (AreAllUsersToAddMissingFromInput())
+                return PresentRequiredUsersToAddMissingResult();
             
             
             if (! await LoadClubFromStorageByInputModelAsync())
                 return PresentClubNotFoundResult();
 
 
-            if (!await LoadMembersFromStorageByInputModelAsync())
-                return PresentMembersInListNotFoundResult();
+            if (!await LoadUsersFromStorageByInputModelAsync())
+                return PresentUsersInListNotFoundResult();
 
+
+            foreach(var user in _loadedUsers)
+            {
+                var clubMember = new ClubMember { UserId = user.Id };
+                _loadedClub.ClubMembers.Add(clubMember);
+            }
+
+            //if(_loadedClub.IsValid)
+               
 
             throw new NotImplementedException();
         }
@@ -96,52 +105,52 @@ namespace Rang.Demo.CleanArchitecture.Application.UseCase.Interactor
             };
         }
 
-        protected virtual bool AreAllMembersToAddMissingFromInput()
+        protected virtual bool AreAllUsersToAddMissingFromInput()
         {
-            return _inputModel.MemberModelsToAdd == null || !_inputModel.MemberModelsToAdd.Any();
+            return _inputModel.UserModelsToAdd == null || !_inputModel.UserModelsToAdd.Any();
         }
 
-        protected virtual CommandResult<AddMembersToClubOutputModel> PresentRequiredMembersToAddMissingResult()
+        protected virtual CommandResult<AddMembersToClubOutputModel> PresentRequiredUsersToAddMissingResult()
         {
-            _presenter.PresentErrorMessage(string.Format("No members were selected to add to the {0} club.", _inputModel.ClubModel.Name));
+            _presenter.PresentErrorMessage(string.Format("No users were selected to add to the {0} club.", _inputModel.ClubModel.Name));
 
             return new CommandResult<AddMembersToClubOutputModel>
             {
-                Status = CommandResultStatusCode.MissingMembersToAdd,
+                Status = CommandResultStatusCode.MissingUsersToAdd,
                 ModelValidationErrors = null,
                 OutputModel = null
             };
         }
 
-        protected virtual async Task<bool> LoadMembersFromStorageByInputModelAsync()
+        protected virtual async Task<bool> LoadUsersFromStorageByInputModelAsync()
         {
-            var idsOfMembersToAdd = _inputModel.MemberModelsToAdd
+            var idsOfUsersToAdd = _inputModel.UserModelsToAdd
                 .Where(model => model.Id != Guid.Empty)
                 .Select(memberModel => memberModel.Id)
                 .ToList();
 
-            var usernamesOfMembersToAddWithNoIdSupplied = _inputModel.MemberModelsToAdd
-                .Where(memberModel => memberModel.Id == Guid.Empty)
+            var usernamesOfMembersToAddWithNoIdSupplied = _inputModel.UserModelsToAdd
+                .Where(model => model.Id == Guid.Empty)
                 .Select(models => models.Username)
                 .ToList();
 
-            if (idsOfMembersToAdd.Count + usernamesOfMembersToAddWithNoIdSupplied.Count != _inputModel.MemberModelsToAdd.Count)
+            if (idsOfUsersToAdd.Count + usernamesOfMembersToAddWithNoIdSupplied.Count != _inputModel.UserModelsToAdd.Count())
                 return false;
 
-            var membersRecoveredById = await _entityGateway
-                .GetUsersByListOfIdsAsync(idsOfMembersToAdd);
+            var usersRecoveredById = await _entityGateway
+                .GetUsersByListOfIdsAsync(idsOfUsersToAdd);
 
-            var membersRecoveredByUsername = await _entityGateway
+            var usersRecoveredByUsername = await _entityGateway
                 .GetUsersByListOfUsernamesAsync(usernamesOfMembersToAddWithNoIdSupplied);
 
-            _loadedMembers = membersRecoveredById.Concat(membersRecoveredByUsername);
+            _loadedUsers = usersRecoveredById.Concat(usersRecoveredByUsername);
 
-            return _inputModel.MemberModelsToAdd.Count == _loadedMembers.Count();
+            return _inputModel.UserModelsToAdd.Count() == _loadedUsers.Count();
         }
         
-        protected virtual CommandResult<AddMembersToClubOutputModel> PresentMembersInListNotFoundResult()
+        protected virtual CommandResult<AddMembersToClubOutputModel> PresentUsersInListNotFoundResult()
         {
-            _presenter.PresentInformationMessage("Couldn't find some of the members selected.");
+            _presenter.PresentInformationMessage("Couldn't find some of the users selected.");
 
             return new CommandResult<AddMembersToClubOutputModel>
             {

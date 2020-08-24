@@ -7,17 +7,17 @@ namespace Rang.Demo.CleanArchitecture.Application.UseCase.In
     {
         //fields
         protected ClubModel _clubModel;
-        protected IList<UserModel> _memberModelsToAdd;
+        protected IEnumerable<UserModel> _userModelsToAdd;
 
         //properties
         public ClubModel ClubModel { get => _clubModel; set => _clubModel = value; }
-        public IList<UserModel> MemberModelsToAdd { get => _memberModelsToAdd; set => _memberModelsToAdd = value; } 
+        public IEnumerable<UserModel> UserModelsToAdd { get => _userModelsToAdd; set => _userModelsToAdd = value; } 
 
         //constructors
         public AddMembersToClubInputModel()
         {
             _clubModel = new ClubModel();
-            _memberModelsToAdd = new List<UserModel>();
+            _userModelsToAdd = new List<UserModel>();
         }
 
         //methods

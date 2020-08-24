@@ -11,6 +11,7 @@ namespace Rang.Demo.CleanArchitecture.Application.Infrastructure.PlugIn
         //write
         Task<User> AddUserAsync(User user);
         Task<Club> AddClubAsync(Club club);
+        Task<Club> SaveClubAsync(Club club);
 
         //read
         Task<User> GetUserByUsernameAsync(string username);
