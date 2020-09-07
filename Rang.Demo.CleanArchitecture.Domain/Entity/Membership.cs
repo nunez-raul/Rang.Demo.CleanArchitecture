@@ -5,21 +5,21 @@ using System.Linq;
 
 namespace Rang.Demo.CleanArchitecture.Domain.Entity
 {
-    public class ClubMember : BaseEntity<ClubMemberModel>
+    public class Membership : BaseEntity<MembershipModel>
     {
         //properties
         public Guid Id { get => _model.Id; }
         public Guid UserId { get => _model.UserId; set => _model.UserId = value; }
 
         //constructors
-        public ClubMember()
-            : base(new ClubMemberModel()) { }
+        public Membership()
+            : base(new MembershipModel()) { }
 
-        public ClubMember(ClubMemberModel model)
+        public Membership(MembershipModel model)
             : base(model) { }
 
         //methods
-        public override ClubMemberModel GetModel()
+        public override MembershipModel GetModel()
         {
             return _model;
         }

@@ -235,5 +235,29 @@ namespace Rang.Demo.CleanArchitecture.XUnitTest.ApplicationTests
             Assert.NotNull(result);
             Assert.True(result.Status == Application.Common.CommandResultStatusCode.UsersInListNotFound);
         }
+
+        //[Fact]
+        //public async Task AddMembersToClubAsync_CommandResult_UsersToAddDupplicated()
+        //{
+        //    //arrange
+        //    string existingClubName = "C# Knights";
+        //    var usersToPreload = new User[] { new User { Username = "whitesheep" } };
+        //    var membershipsToPreload = new Membership[] { new Membership { UserId = usersToPreload[0].Id} };
+        //    var clubsToPreload = new Club[] { new Club { Name = existingClubName, Memberships = membershipsToPreload } };
+        //    var loader = InMemoryEntityGatewayFactory.GetLoader();
+        //    loader.Clubs = clubsToPreload;
+        //    loader.Users = usersToPreload;
+        //    IEntityGateway entityGateway = await InMemoryEntityGatewayFactory.CreateEntityGatewayAsync(loader);
+        //    IAddMembersToClubPresenter presenter = new FakeAddMembersToClubPresenter(_output);
+        //    IAddMembersToClubInteractor interactor = new AddMembersToClubInteractor(presenter, entityGateway);
+        //    AddMembersToClubInputModel inputModel = new AddMembersToClubInputModel { ClubModel = new Domain.Model.ClubModel { Name = existingClubName }, UserModelsToAdd = usersToPreload.Select(member => member.GetModel()).ToList() };
+
+        //    //act
+        //    var result = await interactor.AddMembersToClubAsync(inputModel);
+
+        //    //assert
+        //    Assert.NotNull(result);
+        //    Assert.True(result.Status == Application.Common.CommandResultStatusCode.FailedModelValidation);
+        //}
     }
 }

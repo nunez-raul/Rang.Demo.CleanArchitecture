@@ -52,12 +52,15 @@ namespace Rang.Demo.CleanArchitecture.Application.UseCase.Interactor
 
             foreach(var user in _loadedUsers)
             {
-                var clubMember = new ClubMember { UserId = user.Id };
-                _loadedClub.ClubMembers.Add(clubMember);
+                var membership = new Membership { UserId = user.Id };
+                _loadedClub.Memberships.Add(membership);
             }
 
-            //if(_loadedClub.IsValid)
-               
+            if (!_loadedClub.IsValid)
+            {
+                return PresentValidationErrors();
+            }
+
 
             throw new NotImplementedException();
         }
@@ -156,6 +159,18 @@ namespace Rang.Demo.CleanArchitecture.Application.UseCase.Interactor
             {
                 Status = CommandResultStatusCode.UsersInListNotFound,
                 ModelValidationErrors = null,
+                OutputModel = null
+            };
+        }
+
+        protected virtual CommandResult<AddMembersToClubOutputModel> PresentValidationErrors()
+        {
+            _presenter.PresentValidationErrors(_loadedClub.ModelValidationErrors);
+
+            return new CommandResult<AddMembersToClubOutputModel>
+            {
+                Status = CommandResultStatusCode.FailedModelValidation,
+                ModelValidationErrors = _loadedClub.ModelValidationErrors,
                 OutputModel = null
             };
         }

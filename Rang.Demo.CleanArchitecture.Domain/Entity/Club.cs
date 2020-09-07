@@ -15,7 +15,7 @@ namespace Rang.Demo.CleanArchitecture.Domain.Entity
         //properties
         public Guid Id { get => _model.Id; }
         public string Name { get => _model.Name; set => _model.Name = value; }
-        public ICollection<ClubMember> ClubMembers { get; private set; }
+        public ICollection<Membership> Memberships { get;  set; }
 
         //constructors
         public Club()
@@ -33,14 +33,14 @@ namespace Rang.Demo.CleanArchitecture.Domain.Entity
         protected override void InitializeMe()
         {
             //used for initializing member collections
-            if (_model.ClubMemberModels.Count > 0)
+            if (_model.MembershipModels.Count > 0)
             {
-                ClubMembers = _model.ClubMemberModels.Select(clubMemberModel => new ClubMember(clubMemberModel)).ToList();
-                ValidateClubMemberList();
+                Memberships = _model.MembershipModels.Select(membershipModel => new Membership(membershipModel)).ToList();
+                ValidateMemberships();
             }
             else
             {
-                ClubMembers = new List<ClubMember>();
+                Memberships = new List<Membership>();
             }
         }
 
@@ -62,24 +62,24 @@ namespace Rang.Demo.CleanArchitecture.Domain.Entity
             }
 
             //Club Members
-            ValidateClubMemberList();
+            ValidateMemberships();
 
             return !ModelValidationErrors.Any();
         }
 
-        protected virtual void ValidateClubMemberList()
+        protected virtual void ValidateMemberships()
         {
             StringBuilder sb = new StringBuilder();
-            foreach (ClubMember cm in ClubMembers)
+            foreach (Membership m in Memberships)
             {
-                if(cm == null)
+                if(m == null)
                 {
-                    throw new ArgumentNullException("ClubMemberModels");
+                    throw new ArgumentNullException("MembershipModels");
                 }
 
-                if (!cm.IsValid)
+                if (!m.IsValid)
                 {
-                    foreach (var validationError in cm.ModelValidationErrors)
+                    foreach (var validationError in m.ModelValidationErrors)
                     {
                         sb.AppendLine(string.Format("{0}: {1}", validationError.Key, string.Join(",", validationError.Value)));
                     }
@@ -90,12 +90,12 @@ namespace Rang.Demo.CleanArchitecture.Domain.Entity
             }
 
             if (!ModelValidationErrors.ContainsKey(ModelValidationStatusCode.InvalidDataSupplied))
-                CheckDuplicatedClubMemberModels();
+                CheckDuplicatedMembershipModels();
         }
 
-        private bool CheckDuplicatedClubMemberModels()
+        private bool CheckDuplicatedMembershipModels()
         {
-            var hasDuplicates = _model.ClubMemberModels
+            var hasDuplicates = _model.MembershipModels
                 .GroupBy(model => model.UserId)
                 .Where(g => g.Count() > 1).Any();
 

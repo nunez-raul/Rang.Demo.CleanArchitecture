@@ -6,12 +6,12 @@ namespace Rang.Demo.CleanArchitecture.Domain.Model
     {
         //properties
         public string Name { get; set; }
-        public ICollection<ClubMemberModel> ClubMemberModels { get; set; }
+        public ICollection<MembershipModel> MembershipModels { get; set; }
 
         //constructors
         public ClubModel()
         {
-            ClubMemberModels = new List<ClubMemberModel>();
+            MembershipModels = new List<MembershipModel>();
         }
     }
 }

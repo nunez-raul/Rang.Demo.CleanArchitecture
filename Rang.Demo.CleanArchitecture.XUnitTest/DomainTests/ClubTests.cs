@@ -29,10 +29,10 @@ namespace Rang.Demo.CleanArchitecture.XUnitTest.DomainTests
             // arrange
             var johnDoe = new User { Username = "john.doe" };
             var williamDoe = new User { Username = "william.doe" };
-            var clubMemberModels = new ClubMemberModel[] {
-                new ClubMemberModel { UserId = johnDoe.Id },
-                new ClubMemberModel { UserId = williamDoe.Id } };
-            var model = new ClubModel { Name = "C# Coding Club", ClubMemberModels = clubMemberModels };
+            var membershipModels = new MembershipModel[] {
+                new MembershipModel { UserId = johnDoe.Id },
+                new MembershipModel { UserId = williamDoe.Id } };
+            var model = new ClubModel { Name = "C# Coding Club", MembershipModels = membershipModels };
 
             // act
             var entity = new Club(model);
@@ -58,15 +58,15 @@ namespace Rang.Demo.CleanArchitecture.XUnitTest.DomainTests
         }
 
         [Fact]
-        public void CreateClub_ThrowsException_DuplicateClubMembersInput()
+        public void CreateClub_ThrowsException_DuplicateMembershipsInput()
         {
             // arrange  
             var johnDoe = new User { Username = "john.doe" };
-            var clubMemberModel = new ClubMemberModel { UserId = johnDoe.Id };
-            var clubMemberModels = new ClubMemberModel[] {
-                clubMemberModel,
-                clubMemberModel }; //<-- Added twice the same clubMemberModel to the array of models
-            var model = new ClubModel { Name = "C# Coding Club", ClubMemberModels = clubMemberModels };
+            var membershipModel = new MembershipModel { UserId = johnDoe.Id };
+            var membershipModels = new MembershipModel[] {
+                membershipModel,
+                membershipModel }; //<-- Added twice the same MembershipModel to the array of models
+            var model = new ClubModel { Name = "C# Coding Club", MembershipModels = membershipModels };
 
             // act
             var entity = new Club(model);
@@ -83,10 +83,10 @@ namespace Rang.Demo.CleanArchitecture.XUnitTest.DomainTests
         {
             // arrange  
             var johnDoe = new User { Username = "john.doe" };
-            var clubMemberModels = new ClubMemberModel[] {
-                new ClubMemberModel { UserId = johnDoe.Id },
-                new ClubMemberModel { UserId = johnDoe.Id } }; //<-- added the same memberId within 2 different ClubMemberModel to the array of models
-            var model = new ClubModel { Name = "C# Coding Club", ClubMemberModels = clubMemberModels };
+            var membershipModels = new MembershipModel[] {
+                new MembershipModel { UserId = johnDoe.Id },
+                new MembershipModel { UserId = johnDoe.Id } }; //<-- added the same memberId within 2 different MembershipModel to the array of models
+            var model = new ClubModel { Name = "C# Coding Club", MembershipModels = membershipModels };
 
             // act
             var entity = new Club(model);
@@ -163,10 +163,10 @@ namespace Rang.Demo.CleanArchitecture.XUnitTest.DomainTests
         {
             // arrange
             var johnDoe = new User { Username = "john.doe" };
-            var clubMemberModels = new ClubMemberModel[] {
-                new ClubMemberModel { UserId = johnDoe.Id },
-                new ClubMemberModel { UserId = Guid.Empty } };
-            var model = new ClubModel { Name = "C# Coding Club", ClubMemberModels = clubMemberModels };
+            var membershipsModels = new MembershipModel[] {
+                new MembershipModel { UserId = johnDoe.Id },
+                new MembershipModel { UserId = Guid.Empty } };
+            var model = new ClubModel { Name = "C# Coding Club", MembershipModels = membershipsModels };
 
             // act
             var entity = new Club(model);
@@ -182,10 +182,10 @@ namespace Rang.Demo.CleanArchitecture.XUnitTest.DomainTests
         {
             // arrange
             var johnDoe = new User { Username = "john.doe" };
-            var clubMemberModels = new ClubMemberModel[] {
-                new ClubMemberModel { UserId = johnDoe.Id },
+            var membershipModels = new MembershipModel[] {
+                new MembershipModel { UserId = johnDoe.Id },
                 null };
-            var model = new ClubModel { Name = "C# Coding Club", ClubMemberModels = clubMemberModels };
+            var model = new ClubModel { Name = "C# Coding Club", MembershipModels = membershipModels };
 
             // act
             Action action = () => new Club(model);

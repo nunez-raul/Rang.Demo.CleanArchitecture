@@ -6,16 +6,16 @@ using Xunit;
 
 namespace Rang.Demo.CleanArchitecture.XUnitTest.DomainTests
 {
-    public class ClubMemberTests
+    public class MembershipTests
     {
         [Fact]
-        public void CreateClubMember_Success_DefaultConstructor()
+        public void CreateMembership_Success_DefaultConstructor()
         {
             // arrange
             var member = new User();
 
             // act
-            var entity = new ClubMember{ UserId = member.Id };
+            var entity = new Membership{ UserId = member.Id };
 
             // assert
             Assert.NotNull(entity);
@@ -25,14 +25,14 @@ namespace Rang.Demo.CleanArchitecture.XUnitTest.DomainTests
         }
 
         [Fact]
-        public void CreateClubMember_Success_Constructor1()
+        public void CreateMembership_Success_Constructor1()
         {
             // arrange
             var member = new User();
-            var model = new ClubMemberModel { UserId = member.Id };
+            var model = new MembershipModel { UserId = member.Id };
 
             // act
-            var entity = new ClubMember(model);
+            var entity = new Membership(model);
 
             // assert
             Assert.NotNull(entity);
@@ -42,26 +42,26 @@ namespace Rang.Demo.CleanArchitecture.XUnitTest.DomainTests
         }
 
         [Fact]
-        public void CreateClubMember_ThrowsException_NullInput()
+        public void CreateMembership_ThrowsException_NullInput()
         {
             // arrange  
-            ClubMemberModel model = null;
+            MembershipModel model = null;
             
             // act
-            Action action = () => new ClubMember(model);
+            Action action = () => new Membership(model);
 
             // assert
             Assert.Throws<ArgumentNullException>(action);
         }
 
         [Fact]
-        public void CreateClubMember_FailedModelValidation_NullMemberId()
+        public void CreateMembership_FailedModelValidation_NullMemberId()
         {
             //arrange
-            var model = new ClubMemberModel();
+            var model = new MembershipModel();
 
             //act
-            var entity = new ClubMember(model);
+            var entity = new Membership(model);
 
             //assert
             Assert.NotNull(entity);
@@ -71,13 +71,13 @@ namespace Rang.Demo.CleanArchitecture.XUnitTest.DomainTests
         }
 
         [Fact]
-        public void CreateClubMember_FailedModelValidation_EmptyMemberId()
+        public void CreateMembership_FailedModelValidation_EmptyMemberId()
         {
             //arrange
-            var model = new ClubMemberModel { UserId = Guid.Empty };
+            var model = new MembershipModel { UserId = Guid.Empty };
 
             //act
-            var entity = new ClubMember(model);
+            var entity = new Membership(model);
 
             //assert
             Assert.NotNull(entity);
